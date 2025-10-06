@@ -41,8 +41,6 @@ format:
 
 ## Dagens program
 
-Genopfriskning af lektion X
-
 Tekst som data - Udfordringer
 
 Tekst som tal
@@ -143,6 +141,7 @@ eller andet italesættes, koblinger mellem temaer, holdning og mening)
 ::: {.aside}
 Mange af kode eksemplerne i disse slides er taget fra Kristian Kjeldmann ... 
 :::
+
 
 ## Tekstanalyse: Superviseret vs. usuperviseret Machine Learning 
 
@@ -284,6 +283,316 @@ Faktisk kombinerer mange moderne tilgange det bedste fra begge verdener. Man kan
 
 
 
+## Udfordringer 
+
+Det skrevne sprog er ikke entydigt!
+Jeg elsker politik
+Jeg elsker ikke politik
+Jeg elsker politik, når folk råber i munden på hinanden
+Jeg elsker politik, når folk råber i munden på hinanden. Først
+da kan jeg mærke, hvor passionerede politikerne er.
+
+Det skrevne sprog er ikke entydigt!
+Tim valgte kort før Allan.
+▶ Valgte Tim kort i et spil, før Allan valgte kort?
+▶ Valgte Tim et eller andet lige inden, at Allan valgte noget?
+▶ Valgte Tim kort inden han valgte Allan?
+
+## Dimensionalitetsreduktion
+
+Tekstdata har altid høj dimensionalitet (mange variable)
+▶ Høj dimensionalitet gør det vanskeligere at opsummere data
+simpelt, og mange modeller har svært ved at håndtere det.
+▶ Høj dimensionalitet bevirker typisk også høj *sparsity* (mange
+0-tællinger), som også er en udfordring for mange modeller og
+metoder.
+▶ Ikke blot ordene i teksten, men også sætningskonstruktion
+(syntaks) og ordenes betydning (semantik) er nødvendige for at
+kunne opsummere teksten fyldestgørende
+▶ Derudover kan der være faktorer, som går ud over teksten i sig
+selv, der kan være relevante for, hvordan den skal forstås
+(historisk kontekst, forfatter, medie osv.)
+
+
+Tekstdata er vanskelige at standardisere
+▶ Gradbøjning - vælge, vælger, valgte
+▶ Ens stavemåder - en vælger (navneord), han vælger (verbum)
+▶ Alternative stavemåder - ressource, resurse
+▶ Synonymer - stille, sagte
+▶ Forskellig semantisk “vægt” - hvor relevant er ordet for teksten?
+
+
+Tekstdata har ikke en given datastruktur
+▶ Opgjort på ord, sætninger, afsnit?
+▶ Tællinger? Vægtning?
+▶ Sammenlignes tekster, ord, ordforbindelser, kontekst?
+
+
+▶ Ord og tekster kan repræsenteres numerisk på forskellig vis.
+▶ Computeren har brug for numerisk repræsentation for at kunne
+foretage beregninger.
+▶ Udfordring med tekst: Høj dimensionalitet og høj sparsity
+("tomme"observationer).
+▶ Teoretisk udfordring: Hvordan bevarer vi kontekst for et ord?
+▶ Teknisk udfordring: Hvordan reduceres dimensionalitet uden at
+miste information om ordets kontekst?
+Man anvender termet “text vectorization” til at referere til
+teknikker, der konverterer tekster til matematiske
+repræsentationer (datastrukturer, som man kan foretage
+beregninger på)
+
+
+### EKS 
+
+Document-term matrix
+
+**Tekst 1**: *Jeg elsker spam*
+
+**Tekst 2**: *Jeg kan ikke fordrage spam*
+
+Først opretter vi et ordforråd (`vocabulary`) baseret på alle de unikke ord i vores dokumenter:
+
+```{tex}
+vocab = ['Jeg', 'elsker', 'spam', 'kan', 'ikke', 'fordrage']
+```
+
+```{tex}
+tekst1 = [1, 1, 1, 0, 0, 0]
+tekst2 = [1, 0, 1, 1, 1, 1]
+```
+
+```{tex}
+df = pd.DataFrame([tekst1, tekst2], columns=vocab, index=['tekst1', 'tekst2'])
+print(df)
+```
+
+▶ Én række per tekst, én kolonne per unikt ord/lemma/token
+(“types”).
+▶ Hver række en vektor: Tal der afspejler sammenfaldende ord
+(co-occurrence).
+▶ Dimensionalitet svarende til antal types (“vocabulary”).
+▶ Høj sparsity (mange 0’er) - et problem for mange
+beregningsmetoder/modeller.
+
+
+
+
+
+Datastrukturer for tekster ikke givet.
+Datastruktur afhænger både af, hvordan tekst er konverteret til tokens
+samt af, hvordan ordene skal opgøres (tælles, vægtes eller andet).
+Lad os se på forskellige måder, at repræsentere nedenstående
+sætninger som datastrukturer:
+‘Vi er utroligt beærede’
+‘Vi vil gerne dele prisen med alle’
+‘Det skal vi have gjort op med.’
+
+Tekster som ordtabel
+| ID | Word | POS | Order | doc:ID |
+|----|----------|------|-------|-----|
+| 0 | Vi | PRON | 1 | 1 |
+| 1 | er | AUX | 2 | 1 |
+| 2 | utroligt | ADV | 3 | 1 |
+| 3 | beærede | VERB | 4 | 1 |
+| 4 | Vi | PRON | 1 | 2 |
+| 5 | vil | AUX | 2 | 2 |
+| 6 | gerne | ADV | 3 | 2 |
+| 7 | dele | VERB | 4 | 2 |
+| 8 | prisen | NOUN | 5 | 2 |
+| 9 | med | ADP | 6 | 2 |
+
+Tekster som graf/netværk
+Tekster og datastrukturer
+| ID | From | To |
+|----|----------|----------|
+| 0 | Vi | er |
+| 0 | Vi | utroligt |
+| 0 | Vi | beærede |
+| 0 | er | Vi |
+| 0 | er | utroligt |
+| 0 | er | beærede |
+| 0 | utroligt | Vi |
+| 0 | utroligt | er |
+| 0 | utroligt | beærede |
+| 0 | beærede | Vi |
+
+ID'et (0) angiver at alle disse forbindelser tilhører den samme sætning.
+
+
+
+1. Hvordan skal tekst bearbejdes? (standardisering, sortering,
+udvælgelse)
+2. Hvordan skal tekst repræsenteres? (datastruktur)
+3. Hvordan skal tekst analyseres? (anvendte teknikker, metoder,
+modeller)
+2 og 3 hænger ofte sammen (repræsentation afhænger af analysen,
+som skal foretages).
+
+# Bag-of-Words Repræsentation - Illustration
+
+## Oprindelige tekster:
+1. "Katten spiser fisk"
+2. "Hunden spiser kød"
+3. "Katten og hunden leger"
+
+## Ordforråd (vocabulary):
+[katten, spiser, fisk, hunden, kød, og, leger]
+
+## Bag-of-Words matrix:
+
+| Dokument | katten | spiser | fisk | hunden | kød | og | leger |
+|----------|--------|--------|------|--------|-----|----|----|
+| Tekst 1  | 1      | 1      | 1    | 0      | 0   | 0  | 0  |
+| Tekst 2  | 0      | 1      | 0    | 1      | 1   | 0  | 0  |
+| Tekst 3  | 1      | 0      | 0    | 1      | 0   | 1  | 1  |
+
+Lad mig forklare hvad der sker her. En bag-of-words repræsentation er en af de mest fundamentale måder at omdanne tekst til tal på, så computere kan arbejde med det. Navnet "bag-of-words" (ordpose) fortæller faktisk meget godt hvad metoden gør: forestil dig at du tager alle ordene fra en tekst og putter dem i en pose, hvor du så tæller hvor mange af hvert ord der er, men du glemmer fuldstændigt i hvilken rækkefølge ordene stod.
+I illustrationen ovenfor kan du se hvordan tre simple sætninger bliver omsat til denne repræsentation. Først identificerer vi alle de unikke ord der optræder på tværs af alle tre tekster, og det bliver vores ordforråd. Derefter laver vi en matrix hvor hver række repræsenterer en tekst, og hver kolonne repræsenterer et ord fra ordforrådet. Tallene i cellerne viser simpelthen hvor mange gange det pågældende ord optræder i den pågældende tekst.
+Bemærk hvordan denne repræsentation mister al information om ordrækkefølge. "Katten spiser fisk" og "Fisk spiser katten" ville få nøjagtig samme repræsentation, selvom betydningen er vidt forskellig. Dette er både styrken og svagheden ved bag-of-words: metoden er utroligt simpel og effektiv til mange opgaver som tekstklassificering, men den kan ikke fange nuancer der afhænger af grammatik og ordrækkefølge.
+
+Mange modeller bygger på “bag-of-words” repræsentationer af tekst
+(bag-of-words modeller).
+Optales bag-of-words, da denne struktur ikke tager højde for
+sætningskonstruktion (syntaks) eller semantik.
+Eksempel på bag-of-words struktur: Document-term matrix
+
+Udfordringer med bag-of-words repræsentation
+▶ Tager ikke højde for sætningskonstruktion og semantik
+▶ Giver ofte datastrukturer med høj “sparsity” (mange tomme
+celler).
+
+Simpleste måde at opgøre ord (eller tokens) i tekst: hvor mange
+gange er ordet nævnt i teksten?
+
+
+
+
+
+
+En udbredt måde at opgør ord/tokens er med tf-idf: term
+frequency-inverse document frequency.
+Dette mål udregner, hvor ofte ordet fremgår i en tekst set i forhold til,
+hvor mange tekster ordet fremgår i.
+I udregningen vægtes ord, som fremgår i få tekster, op. Dette ud fra
+en antagelse om, at ord, der fremgår i få tekster, er mere sigende for
+indholdet af de tekster, som ordet indgår i.
+
+tf-idf udregnes som:
+tfidf= tf(t, d) ∗idf(t, D)
+hvor:
+tf(t, d): antal gange term t er nævnt i dokument d
+idf(t, D) = log( D
+|{d∈D:t∈d}| ): logaritmen af antal dokumenter i alt (D)
+divideret med antal dokumenter, der indeholder termet
+({d ∈D : t ∈d})
+Obs: Der kan være variationer i, hvordan tf og idf udregnes samt
+forskelle i brug af standardisering mellem funktioner
+
+Lad mig forklare hvad der egentlig sker her, for TF-IDF er et af de mest elegante koncepter i tekstanalyse, og det bygger på en ret intuitiv idé om hvad der gør ord vigtige.
+Forestil dig at du skal finde ud af hvad en tekst handler om ved at kigge på dens ord. Din første tanke kunne være at tælle hvor ofte hvert ord forekommer, og det er netop hvad Term Frequency gør. Men her støder vi på et problem. Hvis et ord som "og" eller "i" optræder mange gange, betyder det så at teksten handler om "og" eller "i"? Selvfølgelig ikke. Disse ord er bare almindelige lim-ord der dukker op overalt.
+Det er her Inverse Document Frequency kommer ind i billedet. IDF straffer ord der optræder i mange dokumenter, fordi sådanne ord typisk ikke er særligt informative for at forstå hvad et specifikt dokument handler om. Tænk på det sådan her: hvis ordet "spiser" optræder i to ud af tre dokumenter, så er det ret almindeligt i vores samling, og det hjælper ikke så meget med at skelne mellem dokumenterne. Men hvis "fisk" kun optræder i ét dokument, så er det et meget mere karakteristisk ord for netop det dokument.
+Logaritmen i IDF-formlen har en vigtig rolle. Den sikrer at straffen for almindelige ord ikke bliver for hård. Hvis et ord optræder i alle dokumenter, ville en simpel brøk give os nul, men logaritmen gør at kurven bliver mere blød og gradvis. Det betyder at selv relativt almindelige ord stadig kan bidrage lidt til dokumentets repræsentation.
+Når vi ganger TF og IDF sammen, får vi den smukke balance. TF-IDF bliver høj for ord der både optræder ofte i et specifikt dokument og samtidig er sjældne på tværs af dokumentsamlingen. Se hvordan "fisk" får den højeste TF-IDF værdi i dokument 1, fordi det både fylder en tredjedel af dokumentet og er unikt for netop det dokument. På samme måde får "kød" høj værdi i dokument 2.
+Bemærk også hvordan "spiser" får samme lave TF-IDF værdi uanset hvor det optræder. Det er fordi "spiser" er ret almindeligt på tværs af vores dokumenter, så selvom det fylder lige så meget som de andre ord i dokumenterne, så er det ikke særligt karakteristisk. Det hjælper os ikke meget med at forstå hvad der gør hvert dokument unikt.
+Denne matematiske konstruktion fanger faktisk noget meget menneskeligt. Når vi mennesker læser en tekst og skal beslutte hvilke ord der er vigtige, ignorerer vi også automatisk de almindelige fyldord og fokuserer på de ord der skiller sig ud som unikke for netop den tekst. TF-IDF formaliserer bare denne intuition til en formel vi kan regne på.
+
+# TF-IDF med Gentagende Ord - Detaljeret Eksempel
+
+## Oprindelige tekster:
+1. "Katten spiser fisk og katten spiser mælk"
+2. "Hunden spiser kød og hunden løber hurtigt"
+3. "Katten leger og hunden leger sammen"
+
+## Trin 1: Term Frequency (TF) - Ordfrekvens
+
+### Dokument 1: "Katten spiser fisk og katten spiser mælk" (8 ord total)
+- TF(katten) = 2/8 = 0.250
+- TF(spiser) = 2/8 = 0.250
+- TF(fisk) = 1/8 = 0.125
+- TF(og) = 1/8 = 0.125
+- TF(mælk) = 1/8 = 0.125
+
+### Dokument 2: "Hunden spiser kød og hunden løber hurtigt" (7 ord total)
+- TF(hunden) = 2/7 = 0.286
+- TF(spiser) = 1/7 = 0.143
+- TF(kød) = 1/7 = 0.143
+- TF(og) = 1/7 = 0.143
+- TF(løber) = 1/7 = 0.143
+- TF(hurtigt) = 1/7 = 0.143
+
+### Dokument 3: "Katten leger og hunden leger sammen" (6 ord total)
+- TF(katten) = 1/6 = 0.167
+- TF(leger) = 2/6 = 0.333
+- TF(og) = 1/6 = 0.167
+- TF(hunden) = 1/6 = 0.167
+- TF(sammen) = 1/6 = 0.167
+
+## Trin 2: Inverse Document Frequency (IDF)
+
+Totalt antal dokumenter: N = 3
+
+- IDF(katten) = log(3/2) = 0.176
+  - Forekommer i dokument 1 (2 gange) og dokument 3 (1 gang)
+- IDF(spiser) = log(3/2) = 0.176
+  - Forekommer i dokument 1 (2 gange) og dokument 2 (1 gang)
+- IDF(fisk) = log(3/1) = 0.477
+  - Forekommer kun i dokument 1
+- IDF(og) = log(3/3) = 0.000
+  - Forekommer i ALLE tre dokumenter
+- IDF(mælk) = log(3/1) = 0.477
+  - Forekommer kun i dokument 1
+- IDF(hunden) = log(3/2) = 0.176
+  - Forekommer i dokument 2 (2 gange) og dokument 3 (1 gang)
+- IDF(kød) = log(3/1) = 0.477
+  - Forekommer kun i dokument 2
+- IDF(løber) = log(3/1) = 0.477
+  - Forekommer kun i dokument 2
+- IDF(hurtigt) = log(3/1) = 0.477
+  - Forekommer kun i dokument 2
+- IDF(leger) = log(3/1) = 0.477
+  - Forekommer kun i dokument 3
+- IDF(sammen) = log(3/1) = 0.477
+  - Forekommer kun i dokument 3
+
+## Trin 3: TF-IDF = TF × IDF
+
+### Dokument 1:
+- TF-IDF(katten) = 0.250 × 0.176 = 0.044
+- TF-IDF(spiser) = 0.250 × 0.176 = 0.044
+- TF-IDF(fisk) = 0.125 × 0.477 = 0.060
+- TF-IDF(og) = 0.125 × 0.000 = 0.000
+- TF-IDF(mælk) = 0.125 × 0.477 = 0.060
+
+### Dokument 2:
+- TF-IDF(hunden) = 0.286 × 0.176 = 0.050
+- TF-IDF(spiser) = 0.143 × 0.176 = 0.025
+- TF-IDF(kød) = 0.143 × 0.477 = 0.068
+- TF-IDF(og) = 0.143 × 0.000 = 0.000
+- TF-IDF(løber) = 0.143 × 0.477 = 0.068
+- TF-IDF(hurtigt) = 0.143 × 0.477 = 0.068
+
+### Dokument 3:
+- TF-IDF(katten) = 0.167 × 0.176 = 0.029
+- TF-IDF(leger) = 0.333 × 0.477 = 0.159
+- TF-IDF(og) = 0.167 × 0.000 = 0.000
+- TF-IDF(hunden) = 0.167 × 0.176 = 0.029
+- TF-IDF(sammen) = 0.167 × 0.477 = 0.080
+
+## Fuld TF-IDF Matrix:
+
+| Dokument | katten | spiser | fisk  | og    | mælk  | hunden | kød   | løber | hurtigt | leger | sammen |
+|----------|--------|--------|-------|-------|-------|--------|-------|-------|---------|-------|--------|
+| Tekst 1  | 0.044  | 0.044  | 0.060 | 0.000 | 0.060 | 0      | 0     | 0     | 0       | 0     | 0      |
+| Tekst 2  | 0      | 0.025  | 0     | 0.000 | 0     | 0.050  | 0.068 | 0.068 | 0.068   | 0     | 0      |
+| Tekst 3  | 0.029  | 0      | 0     | 0.000 | 0     | 0.029  | 0     | 0     | 0       | 0.159 | 0.080  |
+
+Nu kan vi virkelig se TF-IDF's styrke i aktion med disse mere realistiske eksempler, hvor ord gentages både inden for samme dokument og på tværs af forskellige dokumenter. Lad mig guide dig gennem hvad der sker her, fordi det afslører nogle fascinerende mønstre.
+Først og fremmest bemærk hvordan gentagelser inden for et dokument påvirker TF-værdien. I dokument 1 optræder både "katten" og "spiser" to gange ud af otte ord totalt, hvilket giver dem en TF på 0.250. Det er dobbelt så høj en frekvens som de ord der kun optræder én gang. Det betyder at når vi læser denne sætning, så fylder "katten" og "spiser" mere i vores bevidsthed, simpelthen fordi de går igen.
+Men her kommer det interessante. Selvom "katten" optræder dobbelt så ofte som "fisk" i dokument 1, så ender "fisk" faktisk med en højere TF-IDF score end "katten". Hvorfor? Fordi "katten" også optræder i dokument 3, hvilket giver det en lav IDF på 0.176, mens "fisk" kun findes i dette ene dokument og derfor får en høj IDF på 0.477. TF-IDF belønner altså ikke bare hyppighed, men hyppighed kombineret med unikhed.
+Se nu på ordet "og". Dette er et perfekt eksempel på hvorfor vi overhovedet har brug for IDF-komponenten. Ordet "og" optræder i alle tre dokumenter, hvilket giver det en IDF på præcis nul. Det betyder at uanset hvor mange gange "og" optræder i et dokument, så bliver dets TF-IDF værdi altid nul. Systemet har effektivt lært at ignorere dette almindelige bindeord, præcis som vi mennesker instinktivt gør når vi læser.
+Lad os kigge på dokument 2, hvor "hunden" optræder to gange. Dette giver "hunden" en relativt høj TF på 0.286, den højeste TF i hele dette dokument faktisk. Men når vi ganger med IDF, så får "hunden" en lavere endelig TF-IDF score end de unikke ord "kød", "løber" og "hurtigt", selvom disse kun optræder én gang hver. Forklaringen er at "hunden" også findes i dokument 3, så det er ikke unikt for dokument 2.
+Dokument 3 giver os det mest dramatiske eksempel. Her optræder "leger" to gange ud af seks ord totalt, hvilket giver det en imponerende TF på 0.333, den højeste TF vi ser i hele datasættet. Samtidig er "leger" unikt for dette dokument, så det får den høje IDF på 0.477. Når vi ganger disse to sammen, får vi en TF-IDF på 0.159, den absolut højeste værdi i hele matrixen. Hvis vi skulle vælge ét enkelt ord til at repræsentere hvert dokument, ville TF-IDF algoritmen fortælle os at "leger" er kerneordet i dokument 3, "kød", "løber" og "hurtigt" deler førstepladsen i dokument 2, mens "fisk" og "mælk" er de mest karakteristiske i dokument 1.
+Det smukke ved TF-IDF er at den automatisk justerer for både hvor meget plads et ord optager i et dokument og hvor sjældent det er på tværs af hele samlingen. Den fanger den balance mellem lokal vigtighed og global unikhed, som vi intuitivt bruger når vi selv skal bestemme hvilke ord der definerer en teksts indhold. Et ord kan optræde mange gange og stadig være uvæsentligt hvis det er for almindeligt, og et sjældent ord kan være mindre vigtigt hvis det kun nævnes en enkelt gang tilfældigt. TF-IDF finder de ord hvor både frekvens og sjældenhed peger i samme retning.
 
 
 
