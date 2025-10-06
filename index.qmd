@@ -41,14 +41,244 @@ format:
 
 ## Dagens program
 
-* *Scrapers* og *crawlers*
-  * Herunder kort om internettet og HTML 
-  * `requests`
-  * `BeautifulSoup`
-  * `scrapy`
-* *API*'er
-* Fælleskodning
-* Hvis tid, *øvelser*
+Genopfriskning af lektion X
+
+Tekst som data - Udfordringer
+
+Tekst som tal
+  Tekst som vektorer
+  Tekster som matrix
+  Tekster som ordtabel
+  Tekster som graf/netværk
+  Overvejeser med tekst som data
+
+Fra tekst til datastruktur
+  Bag-of-words repræsentation
+  Tf-idf vægtning
+
+
+
+Læringsmål 
+
+▶ Have kendskab til centrale koncepter inden for "computationel tekstanalyse".
+▶ Forståelse for generelle muligheder med computationel tekstanalyse og natural
+language processing.
+▶ Forståelse for væsentlige udfordringer i at anvende computationel tekstanalyse til
+samfundsvidenskabelige analyser.
+▶ Forståelse for teknikker anvendt i natural language processing.
+▶ Kompetence til at anvende eksisterende sprogmodeller i Python.
+▶ Kompetence til at anvende dictionary model på tekstdata i Python
+
+Muligheder med data
+▶ Øget tilgængelighed af eksisterende
+tekstdata (arkiver, nyhedsmedier,
+policy dokumenter)
+▶ Tidligere produceret kvalitative data
+(interviewtransskriberinger,
+lydoptagelser)
+▶ Øget mængde af "digitalt fødte"data
+(sociale medier, kommentarspor,
+anmeldelser, reaktioner)
+
+Muligheder med metoder
+▶ Bedre til at udnytte at data er digitale
+▶ Tilgængelighed af hardware tillader
+bearbejdning af større mængder af
+data
+▶ Øget genbrug af tilgængelige
+ressourcer (sprogmodeller,
+dictionaries, trænede modeller og
+classifiers)
+
+
+Natural Language Processing (NLP)
+Computervidenskabelig disciplin, der beskæftiger sig med, hvordan en computer kan
+forstå og producere menneskeligt sprog
+Computationel tekstanalyse ("text mining")
+Anvendelse af natural language processing til analytiske formål.
+
+▶ Behandling og bearbejdning af “naturligt sprog” ved hjælp af computerteknologi
+▶ Teknikker der involverer statistiske metoder til at forstå tekst - med eller uden
+lingvistiske indsigter
+▶ Et sæt af værktøjer der tillader, at computere kan bearbejde og udlede information
+fra lingvistisk data (tekst eller tale)
+▶ Krydsfelt mellem datalogi og lingvistik
+▶ Involverer i stigende grad brug af maskinlæringsteknologi
+Eksempler fra hverdagen: ChatGPT, Tale-til-tekst applikationer, tekstforslag i beskeder,
+autokorrektur, oversættelsestjenester (Google Translate)
+
+
+
+
+(Maskinlærings)ingeniøren
+▶ Ofte interesseret i målbare koncepter
+▶ Forventer valideringsdata
+▶ Interesseret i generisk kontekst
+(genanvendelighed)
+▶ Accepterer menneskelige udsagn og
+vurdering (data er data)
+
+Samfundsforskeren
+▶ Ofte interesseret i latente koncepter
+▶ Må acceptere mangel på
+valideringsdata
+▶ Interesseret i specifik kontekst
+▶ Skepsis ift. menneskelige udsagn og
+vurdering
+
+
+
+Analyseformål 
+▶ Skabe overblik (fx nøgleordsanalyse)
+▶ Identificér og måle prædefinerede, relevante koncepter
+(hate-speech, politisk ideologi, diskurs)
+▶ Udlede metrikker/variable
+▶ Udforske og forstå komplekse meningssammenhænge
+(hvordan temaer opstår og udvikler sig, hvordan befolkningsgrupper, institutioner
+eller andet italesættes, koblinger mellem temaer, holdning og mening)
+▶ Identificér sociale aktører og deres (formodede) handlinger
+(hvem gjorde hvad til hvem?)
+▶ Brug af "dependency parsing"(computationel analyse af sætningskonstruktion)
+
+::: {.aside}
+Mange af kode eksemplerne i disse slides er taget fra Kristian Kjeldmann ... 
+:::
+
+## Tekstanalyse: Superviseret vs. usuperviseret Machine Learning 
+
+Computationel tekstanalyse handler om at bruge computerens kapacitet til at finde mønstre, strukturer og betydninger i store mængder tekst, som ville være umulige for mennesker at behandle manuelt. Tænk på det som at give computeren "øjne" til at se mønstre i sproget.
+
+Supervised vs Unsupervised:
+
+Dictionary metoder
+▶ Prædefineret ordliste relateret til koncepter
+▶ Genbrug af eksisterende ordlister/dictionaries (fx til sentiment-analyse)
+Superviseret maskinlæring
+▶ Kræver at tekster (hele tekster, afsnit, sætninger) er kategoriseret i forvejen
+(hvilket koncept afspejler teksten?)
+
+
+Involverer en eller anden form for usuperviseret maskinlæring.
+Gruppering på tekstniveau
+▶ Klyngeanalyser
+▶ Topic models
+Gruppering på ordniveau
+▶ Tekst som vektorer (fx word embeddings)
+
+Supervised: Preprocessing evalueres via accuracy/F1-score
+Unsupervised: Ingen klar metrik; fokus på interpretérbarhed
+Eksempel: perplexity (topic models) ≠ human interpretability
+
+Superviserede metoder: Læring med vejledningForestil dig, at du skal lære et barn at genkende forskellige dyrearter. Den mest oplagte måde ville være at vise barnet billeder af dyr, hvor du hver gang siger: "Det her er en hund", "Det her er en kat", og så videre. Efter at have set mange eksempler kan barnet begynde at genkende nye dyr, det ikke har set før. Sådan fungerer superviserede metoder i tekstanalyse.I superviseret læring giver vi computeren et træningsdatasæt, hvor hver tekst allerede er blevet mærket eller kategoriseret af mennesker. Hvis vi for eksempel vil bygge et system til at klassificere filmanmeldelser som positive eller negative, starter vi med at give computeren tusindvis af anmeldelser, hvor vi på forhånd har markeret hver enkelt som enten positiv eller negativ. Computeren lærer så at finde de sproglige mønstre, der karakteriserer hver kategori.De mest almindelige superviserede metoder til tekstanalyse omfatter klassifikationsalgoritmer som Naive Bayes, Support Vector Machines og neurale netværk. Disse metoder lærer at mappe fra tekstens karakteristika til de kategorier, vi har defineret. En vigtig pointe er, at kvaliteten af den superviserede model er dybt afhængig af kvaliteten og omfanget af de mærkede data, vi træner den med.
+
+
+Naive Bayes klassifikation: Superviseret læring gennem sandsynlighedsteoriNaive Bayes er elegant, fordi den hviler på et fundament, de fleste kender fra sandsynlighedsregning. Forestil dig, at du står med en filmanmeldelse og vil afgøre, om den er positiv eller negativ. Naive Bayes spørger: "Givet de ord, jeg ser i denne anmeldelse, hvad er sandsynligheden for, at den tilhører hver kategori?"Det matematiske fundament: Bayes' sætningHele metoden springer ud af Bayes' sætning, som er en af sandsynlighedsteoriens perler. Sætningen fortæller os, hvordan vi kan vende en betinget sandsynlighed om. Hvis vi kalder vores kategorier for C (som kunne være "positiv" eller "negativ") og vores dokument for D (repræsenteret ved de ord, det indeholder), så siger Bayes' sætning:
+
+$$
+P(C \mid D) = \frac{P(D \mid C) \times P(C)}{P(D)}
+$$
+
+Lad mig pakke denne formel ud ord for ord. P(C|D) er den posterior sandsynlighed - sandsynligheden for, at dokumentet tilhører kategori C, givet at vi har observeret ordene i D. Dette er præcist, hvad vi vil finde ud af. P(D|C) er likelihood'en - sandsynligheden for at se netop denne kombination af ord, hvis vi ved, at dokumentet tilhører kategori C. P(C) er prior sandsynligheden - vores forhåndsforventning om, hvor sandsynlig kategorien er, før vi har set dokumentet. Endelig er P(D) en normaliseringskonstant, der sikrer, at sandsynlighederne summerer til én.
+
+Den naive antagelse: Uafhængighed mellem ordHer kommer det "naive" ind i billedet. I virkeligheden er ord i en tekst selvfølgelig ikke uafhængige af hinanden. Hvis du ser ordet "ikke" i en sætning, påvirker det kraftigt sandsynligheden for, hvilke ord der kommer efter. Men Naive Bayes antager, at alle ord er betingelsesvist uafhængige givet kategorien. Dette er matematisk udtrykt som:
+
+$$
+P(D \mid C) = P(w_1, w_2, \ldots, w_n \mid C) = P(w_1 \mid C) \times P(w_2 \mid C) \times \cdots \times P(w_n \mid C)
+$$
+
+hvor w₁, w₂, osv. er de individuelle ord i dokumentet. Denne antagelse er objektivt forkert, men den fungerer overraskende godt i praksis, fordi den gør beregningerne håndterbare.
+
+Et konkret eksempel: Sentimentanalyse
+Lad os arbejde med et konkret eksempel for at se matematikken i aktion. Forestil dig, at vi har trænet vores model på mange filmanmeldelser, og vi nu ser denne korte anmeldelse: "fantastisk film elsker".
+Vi har to kategorier: positiv (P) og negativ (N). Fra vores træningsdata har vi lært følgende sandsynligheder. Prior sandsynlighederne er P(P) = 0.6 og P(N) = 0.4, fordi 60 procent af vores træningsanmeldelser var positive. Fra vores træningsdata har vi også beregnet, hvor ofte hvert ord optræder i hver kategori.
+For ordet "fantastisk" fandt vi, at P(fantastisk|P) = 0.08 (optrådte i 8 procent af positive anmeldelser) og P(fantastisk|N) = 0.01 (kun 1 procent af negative anmeldelser). For "film" var fordelingen mere balanceret: P(film|P) = 0.15 og P(film|N) = 0.12. For "elsker" så vi en klar positiv tendens: P(elsker|P) = 0.09 og P(elsker|N) = 0.02.
+Nu kan vi beregne den unormaliserede posterior sandsynlighed for positiv kategori:
+P(P|D) ∝ P(P) × P(fantastisk|P) × P(film|P) × P(elsker|P)
+P(P|D) ∝ 0.6 × 0.08 × 0.15 × 0.09 = 0.0006480
+Tilsvarende for negativ kategori:
+P(N|D) ∝ P(N) × P(fantastisk|N) × P(film|N) × P(elsker|N)
+P(N|D) ∝ 0.4 × 0.01 × 0.12 × 0.02 = 0.0000096
+Selv uden at normalisere kan vi se, at den positive sandsynlighed er omkring 67 gange højere end den negative. Efter normalisering ville P(P|D) være cirka 0.985, så modellen er meget sikker på, at dette er en positiv anmeldelse.
+
+Træning og kompleksitet
+Træning af en Naive Bayes klassifikator er bemærkelsesværdigt effektivt. Vi behøver blot at tælle, hvor mange gange hvert ord optræder i hver kategori i vores træningsdata, og derefter beregne sandsynlighederne ved simpel division. Tidskompleksiteten er O(n × m), hvor n er antallet af træningsdokumenter og m er den gennemsnitlige dokumentlængde. Klassifikation af et nyt dokument har kompleksitet O(m × k), hvor k er antallet af kategorier.
+
+
+
+
+
+
+
+Usuperviserede metoder: Selvstændig opdagelseNu forestiller dig i stedet, at du giver barnet en stor kasse med forskellige legetøjsting uden at fortælle noget om dem. Barnet vil naturligt begynde at sortere tingene i bunker baseret på ligheder, det selv opdager - måske lægger det alle røde ting sammen, eller alle ting med hjul. Barnet opdager strukturer uden vejledning. Dette er essensen af usuperviseret læring.I usuperviserede metoder giver vi computeren tekster uden forhåndsmærkninger. I stedet beder vi den om selv at opdage mønstre, grupperinger eller strukturer i materialet. Computeren kigger på, hvilke ord der optræder sammen, hvilke dokumenter der ligner hinanden, eller hvilke latente temaer der gennemsyrer samlingen af tekster.Typiske usuperviserede metoder inkluderer topic modeling som Latent Dirichlet Allocation, hvor computeren identificerer skjulte temaer på tværs af dokumenter, clustering-algoritmer som k-means, der grupperer lignende dokumenter sammen, og word embeddings som Word2Vec, der lærer at repræsentere ord baseret på deres kontekstuelle anvendelse.
+
+
+K-means clustering: Usuperviseret læring gennem geometrisk optimering
+Hvor Naive Bayes arbejder med sandsynligheder og kræver mærkede data, tænker k-means clustering helt anderledes. Forestil dig, at du har tusindvis af dokumenter spredt ud i et højdimensionalt rum, hvor hver dimension repræsenterer et ord eller en tekstfunktion. K-means forsøger at finde naturlige grupperinger i dette rum ved at minimere afstanden mellem dokumenter i samme gruppe.
+
+Det geometriske fundament: Afstand og centrum
+K-means bygger på to simple geometriske idéer. For det første repræsenterer vi hvert dokument som en vektor i et højdimensionalt rum. Hvis vi bruger en bag-of-words repræsentation med N unikke ord, bliver hvert dokument en vektor d = (d₁, d₂, ..., dₙ), hvor dᵢ er en vægt for ord i (ofte en frekvens eller TF-IDF score).
+For det andet definerer vi afstand mellem dokumenter ved hjælp af euklidisk afstand. Afstanden mellem to dokumenter d og d' er:
+
+$$
+\text{distance}(d, d') = \sqrt{\sum_{i=1}^{N} (d_i - d'_i)^2}
+$$
+
+Dette er den direkte linje-afstand mellem to punkter i rummet, generaliseret til N dimensioner.
+
+Optimeringsmålet: Within-cluster sum of squares
+K-means forsøger at partitionere vores n dokumenter i k clusters, hvor k er et tal, vi vælger på forhånd. Målet er at minimere variationen inden for hver cluster. Matematisk formuleres dette som within-cluster sum of squares (WCSS):
+WCSS = Σⱼ₌₁ᵏ Σ_{d∈Cⱼ} ||d - μⱼ||²
+Her er Cⱼ det j'te cluster, μⱼ er centroiden (gennemsnittet) af alle dokumenter i cluster j, og ||d - μⱼ||² er den kvadrerede euklidiske afstand mellem dokument d og centroiden. Intuitionen er klar: vi vil have dokumenter i samme cluster til at ligge tæt på hinanden.
+Centroiden for et cluster beregnes som det simple gennemsnit af alle dokumentvektorer i clusteret:
+μⱼ = (1/|Cⱼ|) Σ_{d∈Cⱼ} d
+hvor |Cⱼ| er antallet af dokumenter i cluster j.
+
+Et konkret eksempel: Clustering af nyhedsartikler
+Lad mig vise et forenklet eksempel med tre artikler i et todimensionalt rum for overskuelighedens skyld. I virkeligheden ville vi have hundredvis eller tusindvis af dimensioner, men princippet er det samme.
+Forestil dig, at vi har repræsenteret tre artikler baseret på deres ordfrekvenser for ordene "politik" og "sport". Artikel A har vektoren (0.8, 0.1), artikel B har (0.7, 0.2), og artikel C har (0.1, 0.9). Vi vil partitionere dem i k = 2 clusters.
+Vi initialiserer ved at vælge artikel A og C som startcentroider, så μ₁ = (0.8, 0.1) og μ₂ = (0.1, 0.9).
+I første iteration assignment step beregner vi afstande. For artikel B finder vi afstanden til μ₁: √((0.7-0.8)² + (0.2-0.1)²) = √(0.01 + 0.01) = 0.141. Afstanden til μ₂ er √((0.7-0.1)² + (0.2-0.9)²) = √(0.36 + 0.49) = 0.922. Artikel B tildeles derfor cluster 1, da den er nærmest μ₁.
+I update step genberegner vi centroiderne. Cluster 1 indeholder nu A og B, så den nye centroid bliver μ₁ = ((0.8+0.7)/2, (0.1+0.2)/2) = (0.75, 0.15). Cluster 2 indeholder kun C, så μ₂ forbliver (0.1, 0.9).
+Vi ville fortsætte denne proces, men i dette simple tilfælde har algoritmen faktisk allerede konvergeret, da ingen dokumenter ville skifte cluster i næste iteration.
+Valg af k: Elbow-metoden
+Et centralt spørgsmål i k-means er, hvordan vi vælger antallet af clusters k. En udbredt tilgang er elbow-metoden, hvor vi kører k-means for forskellige værdier af k og plotter WCSS som funktion af k. WCSS vil altid falde, når k stiger, men vi leder efter det punkt, hvor tilføjelsen af flere clusters giver aftagende gevinster - "albuen" i kurven.
+Matematisk evaluerer vi hvor meget WCSS falder ved at gå fra k til k+1. Når denne reduktion bliver lille, har vi sandsynligvis fundet et fornuftigt antal clusters.
+
+Kompleksitet og konvergens
+Tidskompleksiteten for én iteration af k-means er O(n × k × m × i), hvor n er antallet af dokumenter, k er antallet af clusters, m er dimensionaliteten, og i er antallet af iterationer indtil konvergens. I praksis konvergerer algoritmen ofte hurtigt, typisk inden for 10-20 iterationer for mange tekstdatasæt.
+En vigtig begrænsning er, at k-means er følsom over for initialiseringen og kan konvergere til forskellige lokale optima afhængigt af startpunkterne. Derfor kører man typisk algoritmen flere gange med forskellige tilfældige initialiseringer og vælger den løsning med den laveste WCSS.
+
+
+Sammenligning af de matematiske fundamenter
+Når vi ser på disse to metoder side om side, fremstår deres matematiske DNA som vidt forskellige. Naive Bayes lever i sandsynlighedsteorien verden. Den modellerer eksplicit den generative proces bag tekster: givet en kategori, hvad er sandsynligheden for at generere netop disse ord? Dette gør den til en probabilistisk model, hvor output altid er sandsynligheder, der kan fortolkes direkte.
+K-means derimod er deterministisk og geometrisk. Den bekymrer sig ikke om sandsynligheder, men om afstande i et vektorrum. Dens mål er rent metrisk: minimer den samlede kvadrerede afstand mellem punkter og deres cluster-centre. Dette gør den intuitivt lettere at visualisere, men også mere følsom over for valget af afstandsmål.
+I Naive Bayes er læringen supereffektiv, fordi den reduceres til simpel tælling og division. Vi gennemgår træningsdataene én gang, tæller forekomster, og beregner sandsynligheder. Der er ingen iterativ optimering, ingen lokale optima at bekymre sig om. K-means kræver derimod iterativ refinement, hvor vi gradvist forbedrer vores clustering gennem gentagne assignments og updates.
+En fascinerende forskel er også deres antagelser om data. Naive Bayes' uafhængighedsantagelse er åbenlyst forkert, men modellen fungerer alligevel godt, fordi den fokuserer på relativ sammenligning mellem kategorier frem for absolutte sandsynligheder. K-means antager implicitly, at clusters er sfæriske og omtrent lige store, fordi den bruger euklidisk afstand til centroider. Dette gør den mindre egnet til clusters med uregelmæssige former.
+Begge metoder har en parameter, man skal vælge, men naturen af valget er forskellig. I Naive Bayes handler det om smoothing-parameteren α, som er relativt ukritisk og ofte sættes til 1. I k-means er valget af k fundamentalt for hele analysen og kræver domæneviden eller systematisk evaluering gennem metoder som elbow-kriteriet.
+Når du arbejder med store tekstdatasæt, bliver kompleksitetsforskellene kritiske. Naive Bayes skalerer lineært med mængden af træningsdata, hvilket gør den egnet selv til enorme korpera. K-means skal gentagne gange beregne afstande mellem alle punkter og alle centroider, hvilket kan blive computationelt tungt. Derfor bruges ofte approximationsmetoder eller mini-batch varianter for meget store datasæt.
+Det smukke ved at forstå disse metoder matematisk er, at du kan se præcist, hvad de antager, hvad de optimerer, og hvor de kan fejle. Naive Bayes vil have problemer med stærkt korrelerede features og kan fejlberegne, hvis dens uafhængighedsantagelse er for groft overtrådt. K-means vil kæmpe med overlappende clusters, outliers, eller clusters med vidt forskellige størrelser og former. Men med denne forståelse kan du vælge den rigtige metode til din opgave og fortolke resultaterne med de rigtige forbehold.
+
+
+
+
+
+De centrale ligheder
+Både superviserede og usuperviserede metoder deler nogle fundamentale karakteristika, som er værd at fremhæve. For det første er begge tilgange drevet af data. De bygger ikke på håndskrevne regler om, hvordan sprog fungerer, men lærer i stedet direkte fra eksemplerne i datasættet. Dette gør dem fleksible og i stand til at håndtere sprogets kompleksitet og variation.
+For det andet transformerer begge typer metoder tekst til numeriske repræsentationer, som computeren kan arbejde med. Sprog består af ord og sætninger, men computere regner med tal. Derfor må teksten konverteres til vektorer, matricer eller andre matematiske objekter. Denne transformation sker typisk gennem teknikker som bag-of-words, TF-IDF vægtning eller mere sofistikerede word embeddings.
+For det tredje kræver begge tilgange betydelige mængder data for at fungere godt. Jo mere tekst vi fodrer metoderne med, desto bedre bliver de til at fange sprogets nuancer. Dette er en af grundene til, at computationel tekstanalyse først er blevet virkelig kraftfuld i den digitale tidsalder, hvor enorme tekstkorpora er tilgængelige.
+Endelig evaluerer vi begge typer metoder gennem validering og test. Selvom evalueringsmetoderne er forskellige, så er behovet for at vurdere metodernes kvalitet universelt.
+
+
+De centrale forskelle
+Den mest grundlæggende forskel ligger i brugen af labels eller mærkninger. Superviserede metoder kræver, at nogen - typisk forskere eller annotører - på forhånd har kategoriseret en stor del af teksterne. Dette er både en styrke og en begrænsning. Det er en styrke, fordi vi kan træne modellen til præcist de kategorier, vi er interesserede i. Hvis vi vil skelne mellem sarkastiske og ikke-sarkastiske tweets, kan vi definere netop disse kategorier og træne en model til at genkende dem. Men det er også en begrænsning, fordi manuel annotering er tidskrævende, dyr og nogle gange subjektiv. Usuperviserede metoder omgår dette problem ved at lade dataene selv tale.
+En anden væsentlig forskel handler om formål og anvendelse. Superviserede metoder bruges primært til prædiktive opgaver. Når vi har trænet en model, kan vi bruge den til at klassificere nye, usete tekster. Dette er utroligt nyttigt i praktiske anvendelser som spamfiltrering, sentimentanalyse af kundefeedback eller automatisk kategorisering af nyhedsartikler. Usuperviserede metoder bruges derimod oftere til eksplorativ analyse. De hjælper os med at opdage mønstre, vi måske ikke havde forventet, eller at forstå den overordnede struktur i et tekstkorpus.
+Fortolkningsperspektivet er også forskelligt. Med superviserede metoder ved vi præcist, hvad modellen er trænet til at genkende, fordi vi selv har defineret kategorierne. Med usuperviserede metoder skal vi ofte fortolke, hvad modellen har fundet. Hvis en topic model identificerer 20 temaer i en samling avisartikler, er det vores opgave at undersøge, hvilke ord der karakteriserer hvert tema, og give dem meningsfulde navne.
+Endelig er der en forskel i, hvor vi starter. Superviseret læring starter med en hypotese eller en foruddefineret kategorisering af verden. Vi siger i forvejen: "Disse er de relevante kategorier." Usuperviseret læring er mere induktiv og bottom-up. Vi lader mønstrene i dataene selv fremstå, hvilket kan føre til overraskende indsigter.
+
+
+At vælge den rigtige tilgang
+I praksis handler valget mellem superviserede og usuperviserede metoder ikke om, hvilken der er "bedst", men hvilken der passer bedst til din forskningsspørgsmål og dine ressourcer. Hvis du har en klar kategorisering i tankerne og ressourcerne til at mærke data, kan superviseret læring give dig præcise prædiktive modeller. Hvis du arbejder med et nyt domæne, hvor du vil opdage uventede mønstre, eller hvis du mangler mærkede data, er usuperviserede metoder ofte vejen frem.
+Faktisk kombinerer mange moderne tilgange det bedste fra begge verdener. Man kan for eksempel bruge usuperviserede metoder til at pre-træne sprogmodeller på enorme mængder umærket tekst og derefter fine-tune dem med superviseret læring på en specifik opgave. Dette er præcist, hvad der sker med moderne transformermodeller som BERT.
 
 
 
@@ -59,6 +289,45 @@ format:
 
 
 
+(Denny & Spirling, 2017)
+hvordan preprocessing-valg påvirker resultater i unsupervised text analysis.
+
+1. Ukritisk teknologioverførsel
+
+Preprocessing-råd kommer primært fra supervised learning (klassifikation)
+Anvendes ukritisk på unsupervised metoder (topic models, scaling)
+Men: disse to tilgange har forskellige mål og evalueringsmetrikker
+
+Manglende teoretisk fundament
+
+Forskere følger ofte bare tidligere arbejde ("citation af praksis")
+Substantiv teori er typisk for vag til at guide preprocessing
+Med 7 binære valg er der 128 mulige specifikationer at vælge imellem
+
+| Trin | Beskrivelse                     | Potentielle problemer                                       |
+|------|----------------------------------|--------------------------------------------------------------|
+| **P - Punctuation** | Fjern tegnsætning               | Kan være informativ i visse domæner (f.eks. hashtags)         |
+| **N - Numbers**      | Fjern tal                      | “Section 423” kan være substantivt vigtig                     |
+| **L - Lowercasing**  | Små bogstaver                  | “Rose” (navn) vs “rose” (blomst)                             |
+| **S - Stemming**     | Reduktion til ordstamme        | “partying” og “parties” → “parti”                            |
+| **W - Stopwords**    | Fjern almindelige ord          | Ingen guldstandard-liste; 100–1000 ord                       |
+| **3 - n-grams**      | Inkluder 2- og 3-grams         | “national defense” vs “national debt”                        |
+| **I - Infrequent**   | Fjern sjældne termer           | Typisk <1% document frequency                                 |
+
+
+Dramatiske eksempler på sensitivitet
+UK Manifestos (Wordfish):
+
+12 forskellige rank orderings fra 128 specifikationer
+P-N-S-W-3-I: Labour 1983 mest venstre, Conservative 1983 mest højre ✓
+N-L-3: Labour 1992 mest venstre, Conservative 1987 mest højre ✗
+Konklusioner om britisk politik afhænger totalt af preprocessing!
+
+Congressional Press Releases (LDA):
+
+Optimal antal topics varierer fra 50 til 200 afhængig af preprocessing
+Nøgleord som "Iraq" og "stem cell" optræder i 0-10% af topics
+En forsker kunne konkludere forskellige emner var vigtige/uvigtige
 
 
 
@@ -67,17 +336,780 @@ format:
 
 
 
+ANDEN TEKST: 
+
+
+Annotation som preprocessing
+Part-of-Speech (POS) Tagging:
+
+Hver ord i korpus får tildelt en grammatisk kategori (verb, substantiv, adjektiv osv.)
+Eksempel: ordet light tagges forskelligt som verb ("is tagged as either a verb") vs. substantiv
+Tagget information kan kombineres med leksikalsk analyse for at undersøge specifikke grammatiske mønstre
+
+Tag sets:
+McEnery (1997) beskriver tre forskellige tag set-tilgange:
+
+Minimal tagset (9 tags): kun basale kategorier som noun, verb, adjective
+Intermediær tagset (40-50 tags): f.eks. skelner mellem singular/plural substantiver
+Maksimal tagset (100+ tags): meget detaljeret grammatisk information
+
+Parsing:
+
+Analyserer syntaktiske strukturer og relationer mellem ord
+Leech (1997) nævner fire parser-typer baseret på grammatisk formalisme
+Eksempel på parsed output vises med tag structure som <REF=1>, [NP], [VP] osv.
+
+Vigtige overvejelser:
+
+Annoteret data kræver validering - automatisk tagging er ikke 100% præcis
+Jo mere specialiseret korpus, desto vigtigere at være kritisk overfor preprocessing-valg
+Trade-off mellem tagging-detaljegrad og praktisk anvendelighed
 
 
 
 
 
 
+TREDJE TEKST 
+
+Centrale preprocessing-aspekter i teksten:
+Dokumentrepræsentation (side 3-4):
+
+Hvert dokument beskrives som en m-dimensional vektor af ordfrekvenser (fi), hvor m er antallet af distinkte ord i corpus
+Mange frekvenser er nul, da de fleste ord ikke forekommer i et givet dokument
+Dette er rækkevektoren fra document-term matrix
+
+Standardisering af dokumentlængde (side 4):
+Teksten fremhæver et kritisk preprocessing-valg:
+
+Dokumenter har forskellige længder, så råfrekvenser er ikke sammenlignelige
+Løsning 1: Standardiser ordfrekvenser ved at dividere med det totale antal ord i dokumentet (relative frekvenser)
+Løsning 2: Brug binære frekvenser (0/1) der kun angiver tilstedeværelse/fravær af ord, uanset hvor ofte ordet optræder
+
+Valg ved clustering (side 9):
+Teksten identificerer fire preprocessing-beslutninger:
+
+Ordbogsselektion: Skal man bruge alle distinkte ord eller reducere ved at:
+
+Fjerne sjældne ord (f.eks. kun inkludere ord der optræder i mindst 1% eller 5% af dokumenterne)
+Dette kaldes "putting bounds on the document-sparsity"
+
+
+Frekvenstype:
+
+Count frequencies (rå antal)
+Relative frequencies (divideret med dokumentlængde)
+Binary occurrences (0/1)
+Transformerede frekvenser som tf-idf (omtales i kapitel 4)
+
+
+Distance measure valg (Euclidean, Manhattan, Cosine)
+Linkage criterion (complete, single, average, Ward's)
+
+Vigtigt indsigt (side 5-6):
+Teksten advarer om at Euclidean distance kan overdrive forskelle mellem lange dokumenter, selv når deres relative frekvenser er ens. Derfor anbefales enten:
+
+Cosine distance (upåvirket af dokumentlængde)
+Euclidean/Manhattan distance på standardiserede relative frekvenser
+
+Teksten understreger at "text mining often more of an art than a science" pga. disse mange præprocessing-valg der påvirker resultaterne.
+
+## Preprocessing
+
+### Tokens 
+
+Opdeling af tekst til enkelte “tokens” (ordenheder)
+‘Politiet har givet borgerne råd‘ -> [‘Politiet‘, ‘har‘, ‘givet‘,
+‘borgerne‘, ‘råd‘]
+▶ Evt. frasortering af tegnsætning
+▶ Evt. konvertering til små bogstaver (lower-casing)
+Udfordringer:
+▶ Egenavne i flere ord: Høje Taastrup
+▶ Sammensatte ord med bindestreger
+
+### N-grams 
+Typisk referer tokenization til at opdele tekster i enkeltord.
+Afhængig af formål, kan det være relevant at se på tokens som “ordpar” (bigrams) eller
+“ordsamlinger” (n-grams).
+Bigram eksempel:
+‘Politiet har givet borgerne råd‘ -> [(‘Politiet‘, ‘har‘), (‘har‘,
+‘givet‘), (‘givet‘, ‘borgerne‘), (‘borgerne‘, ‘råd‘)]
+
+### Stemming
+Typisk vil man ikke behandle ord med forskellig gradbøjning som forskellige ord
+Simpleste måde at ensrette: omdanne til ordstammen
+▶ køre -> kør
+▶ kører -> kør
+▶ køren -> kør
+▶ kørte -> kørt
+Flere algoritmer til at lave stemming - dog ikke altid enige!
+▶ Snowball algoritme (sprogfølsom): køren -> kør
+▶ Porter algoritme (ikke sprogfølsom): køren -> køren
+
+### Lemming 
+
+Konverterer ordet til grammtiske stamme (alternativt til stemming)
+▶ køre -> køre
+▶ kører -> køre
+▶ køren -> køren
+▶ kørte -> køre
+Lemmatizere er af nødvendighed sprogafhængige
+Findes typisk som “dictionary-modeller” (nogen har lavet opgørelser af, hvilke ord har
+samme grammatiske stamme)
+
+### Stopord 
+Mange ord indgår i tekst uanset hvad teksten handler om (bindeord, stedord,
+forholdsord o.l.)
+Refereres til som “stopord” - frasorteres da de typisk ikke giver indblik i, hvad tekster
+handler om
+Stopord kan både være generelle (bindeord, stedord, forholdsord) eller
+kontekstspecifikke (fx ‘ordfører’ i referater fra Folketinget).
+
+### POS tagging 
+Opdeler ord i ordklasser: navneord, udsagnsord, tillægsord osv.
+Brugbart til at udlede meningsfulde ord i tekst (tillægsord siger typisk mere om teksten
+end forholdsord).
+Er nødt til at være sprogafhængige og kontekstafhængige (fleste er baseret på
+maskinlæring i dag).
+‘Politiet har givet borgerne råd‘ -> ‘Politiet_NOUN har_AUX givet_VERB
+borgerne_NOUN råd_NOUN‘
+
+### Dependency parsing 
+Dependency parsing udleder sætningskonstruktion: grundled, udsagnsled,
+genstandsled.
+Hjælper til at reducere tvetydighed i tekst - “hvem gjorde hvad til hvem?”
+Brugbart til at udlede meningsfulde dele af teksten (fx fokusere på visse ord, der indgår
+som genstandsled i sætninger).
+Er nødt til at være sprogafhængige og kontekstafhængige (fleste er baseret på
+maskinlæring i dag).
+‘Politiet har givet borgerne råd‘ -> ‘Politiet_nsubj har_aux givet_ROOT
+borgerne_obj råd_obj‘
+
+## Clustering i Computationel Tekstanalyse
+
+Forestil dig at du har tusind dokumenter foran dig på et bord, og din opgave er at sortere dem i bunker, så dokumenter der ligner hinanden ligger sammen. Men der er en udfordring: du må ikke læse dokumenterne først for at danne dig et indtryk af hvad de handler om. I stedet skal du lade dokumenternes egne karakteristika guide dig. Dette er essensen af clustering som en unsupervised learning metode.
+
+Unsupervised betyder at du ikke på forhånd har defineret kategorier eller hypoteser om hvordan dokumenterne bør grupperes. Du stiller simpelthen spørgsmålet: "Hvilke dokumenter ligner hinanden?" og lader dataene selv afsløre deres naturlige grupperinger. Dette adskiller sig fundamentalt fra supervised learning, hvor du ville have foruddefinerede kategorier som "sportsnyheder", "politiske artikler" osv., og træne en model til at genkende dem.
+
+## Hvordan måler vi lighed?
+
+For at kunne clustre dokumenter skal vi først forstå hvordan vi matematisk kan udtrykke hvor meget eller lidt to dokumenter ligner hinanden. Her kommer distance measures ind i billedet.
+
+Hvert dokument bliver repræsenteret som en vektor i et højdimensionelt rum. Hvis dit corpus har 3000 forskellige ord, bliver hvert dokument en vektor med 3000 tal der viser hvor ofte hvert ord forekommer. Dette kaldes document-term matrix repræsentationen. For to dokumenter, som vi kalder fi og fj, kan vi nu beregne forskellige distance measures.
+
+Euclidean distance er den mest intuitive. Tænk på det som at måle den rette linje mellem to punkter i rummet. Matematisk er det kvadratroden af summen af de kvadrerede forskelle mellem alle ord-frekvenser. Hvis dokument A har ordet "demokrati" 10 gange og dokument B har det 3 gange, bidrager dette ord med (10-3)² = 49 til den samlede distance. Læg alle sådanne bidrag sammen for alle ord, og tag kvadratroden. Men Euclidean distance har en vigtig svaghed når vi arbejder med tekst: den bliver uforholdsmæssigt stor for lange dokumenter, selv når deres ordfordeling ligner hinanden.
+
+Manhattan distance (også kaldet L1) er lidt anderledes. I stedet for at kvadrere forskellene, tager du blot den absolutte værdi af hver forskel og lægger dem sammen. Forestil dig at du skal gå gennem et bymønster fra punkt A til punkt B – du kan ikke gå diagonalt, men må følge gaderne. Det giver et andet billede af distance end fugleflugt-linjen (Euclidean).
+
+Cosine distance er særligt elegant for tekstanalyse fordi den er immun overfor dokumentlængde. Den måler ikke hvor langt dokumenterne er fra hinanden i absolut forstand, men derimod vinklen mellem deres vektorer. To dokumenter der har præcis samme ordfordeling vil have en vinkel på 0 grader mellem sig (cosine distance = 0), selv hvis det ene dokument er meget længere end det andet. Matematisk beregner vi først cosine similarity som dot product af de to vektorer divideret med produktet af deres længder, og cosine distance er så 1 minus denne værdi.
+
+## Hierarchical Agglomerative Clustering
+
+Nu til selve clustering-metoderne. Hierarchical agglomerative clustering er som at bygge et stamtræ nedefra og op. Metoden starter med at betragte hvert enkelt dokument som sin egen lille klynge – tusind dokumenter giver tusind singleton-klynger.
+
+Derefter finder algoritmen de to dokumenter der ligger tættest på hinanden og smelter dem sammen til én klynge. Nu har vi 999 klynger. Men hvad gør vi så? Hvordan finder vi ud af hvilke klynger der skal smeltes sammen næste gang, når nogle klynger nu indeholder flere dokumenter?
+
+Her kommer linkage criteria ind. Dette er måske den mest kritiske beslutning i hierarchical clustering. Complete linkage bruger en "farthest neighbor" strategi – distancen mellem to klynger defineres som den største distance mellem nogen to medlemmer fra de respektive klynger. Dette skaber kompakte, homogene klynger fordi to klynger kun smeltes sammen hvis selv deres mest adskilte medlemmer er relativt tæt på hinanden.
+
+Single linkage derimod bruger "closest friend" strategien – distancen mellem to klynger er den mindste distance mellem nogen medlemmer. Dette kan skabe lange, kæde-lignende klynger fordi det kun kræver at ét dokument fra hver klynge ligger tæt på hinanden.
+
+Average linkage tager gennemsnittet af alle parvise distancer mellem medlemmer af de to klynger. Dette balancerer mellem de to ekstremer.
+
+Ward's minimum variance criterion er mere sofistikeret. Den kombinerer klynger sådan at den totale within-cluster variance minimeres. Tænk på det som at forsøge at holde hver klynge så homogen som muligt ved at minimere spredningen omkring klynge-middelværdien.
+
+Metoden fortsætter iterativt. Ved hver trin beregnes alle parvise distancer mellem de resterende klynger, og de to tætteste smeltes sammen. Dette fortsætter indtil alle dokumenter er i én stor klynge.
+
+Dendrogrammet er den visuelle repræsentation af hele denne proces. Det ligner et træ vendt på hovedet, hvor hver grenforgrening viser hvor to klynger blev sammenføjet. Højden af hver U-formet linje viser distancen ved sammenføjningen. Dette er ekstremt værdifuldt fordi det hjælper os med at beslutte hvor mange klynger der er meningsfulde.
+
+Nøglen ligger i at se efter store spring i distance. Hvis distancen fra fire til tre klynger kun stiger lidt, men springet fra tre til to klynger er enormt, fortæller det os at tre klynger sandsynligvis er den rigtige løsning. Det store spring indikerer at vi ville tvinge fundamentalt forskellige grupper sammen ved at reducere til to klynger.
+
+## K-means Clustering
+
+K-means clustering tager en helt anden tilgang. I stedet for at bygge hierarkier gradvist, starter den med at specificere antallet af klynger k på forhånd og forsøger så at fordele alle dokumenter optimalt mellem disse k klynger.
+
+Algoritmen fungerer gennem iteration. Først tildeles dokumenter tilfældigt til k klynger. For hver klynge beregnes så klynge-middelværdien (centroiden) – en vektor der repræsenterer den gennemsnitlige ordfrekvens over alle dokumenter i klyngen. Hvis en klynge har fire dokumenter med hver 10.000 ord, bliver centroiden en vektor af 10.000 gennemsnitsværdier.
+
+Nu kommer reassignment-fasen. For hvert dokument beregnes distancen til alle k centroider, og dokumentet flyttes til den klynge hvis centroid den ligger tættest på. Dette giver en ny fordeling af dokumenter.
+
+Med denne nye fordeling genberegnes centroids, og processen gentages. Nye centroider medfører nye reassignments, som giver nye centroider, og så videre. Algoritmen stopper når dokumenternes tildeling ikke længere ændrer sig – vi har nået en stabil løsning.
+
+Det k-means forsøger at minimere er den totale within-cluster sum of squares. For hver klynge beregnes summen af kvadrerede distancer fra hvert dokument til klynge-centroiden, og disse summer lægges sammen over alle klynger. En lavere værdi betyder mere homogene, kompakte klynger.
+
+En vigtig forskel fra hierarchical clustering er at k-means kræver at du specificerer antallet af klynger på forhånd. Dette kan både være en fordel (hvis du har god grund til at tro der skal være præcis k grupper) og en ulempe (hvis du ikke ved det). I praksis kører man ofte k-means med forskellige værdier af k og evaluerer kvaliteten af hver løsning.
+
+## Fortolkning og karakterisering af klynger
+
+Efter at have kørt en clustering-analyse står vi tilbage med dokumenter fordelt i klynger. Men hvad betyder hver klynge? Her kommer fortolkning ind.
+
+I virkelige anvendelser ville disse være faktiske ord. Måske finder vi en klynge hvor "demokrati", "valg", "parlament" og "politik" dominerer – en politisk klynge. En anden klynge kunne have "kamp", "mål", "spiller" og "liga" – en sports-klynge.
+
+Men husk at clustering er eksplorativ. Du starter ikke med hypoteser om hvad klyngerne skal repræsentere. I stedet observerer du hvad dataene afslører, og først bagefter fortolker du betydningen. Dette er både metodens styrke (den kan finde uventede mønstre) og dens udfordring (fortolkning kan være subjektiv).
+
+## Kunsthåndværk mere end videnskab
+
+Dokumentet konkluderer klogt at tekstclustering ofte er "more of an art than a science". Dette skyldes de mange valg der skal træffes, hver med betydelige konsekvenser for resultaterne.
+
+Du skal vælge hvordan du præprocesserer – fulde ordbøger eller reducerede? Count frequencies eller relative frequencies eller binære? Du skal vælge distance measure – Euclidean, Manhattan eller Cosine? Du skal vælge clustering-metode – hierarchical eller k-means eller en variant? Hvis hierarchical, hvilken linkage? Hvis k-means, hvor mange klynger?
+
+Forskellige kombinationer af disse valg kan føre til vidt forskellige clusterings. Der er ingen enkelt "korrekt" måde at gøre det på. I stedet kræver det eksperimentering, domæneviden og kritisk vurdering af om resultaterne giver mening i forhold til din forskningskontekst.
+
+# Eksempel 
+
+Et simpelt corpusForestil dig at vi har fem korte dokumenter:Dokument 1: "katten sad på måtten. katten sov"
+Dokument 2: "hunden legede i haven. hunden gøede"
+Dokument 3: "katten jagtede musen. katten sprang"
+Dokument 4: "bilen kørte hurtigt. bilen bremsede"
+Dokument 5: "lastbilen kørte langsomt. lastbilen stoppede"
+
+## Document-Term Matrix
+
+Først opretter vi en document-term matrix. Efter at have fjernet stopord (på, i, osv.) og gennemført basic preprocessing, får vi følgende distinct words: katten, sad, måtten, sov, hunden, legede, haven, gøede, jagtede, musen, sprang, bilen, kørte, hurtigt, bremsede, lastbilen, langsomt, stoppede.
+
+| Dokument | kat | ten | hund | en | bil | en | last | bil | en | kørte | s | ad | sov | legede | gjorde | jagtede | sprang | hurtigt | bremsede | langsomt | stoppede |
+|-----------|-----|-----|------|----|-----|----|------|-----|----|--------|---|----|-----|--------|---------|----------|---------|-----------|-----------|-----------|
+| **D1**    | 2   | 0   | 0   | 0  | 0   | 1  | 1   | 0   | 0  | 0      | 0 | 0  | 0   | 0      | 0       | 0        | 0       | 0         | 0         | 0         |
+| **D2**    | 0   | 2   | 0   | 0  | 0   | 0  | 0   | 1   | 1  | 0      | 0 | 0  | 0   | 0      | 0       | 0        | 0       | 0         | 0         | 0         |
+| **D3**    | 2   | 0   | 0   | 0  | 0   | 0  | 0   | 0   | 0  | 0      | 0 | 1  | 1   | 0      | 0       | 0        | 0       | 0         | 0         | 0         |
+| **D4**    | 0   | 0   | 2   | 0  | 1   | 0  | 0   | 0   | 0  | 0      | 0 | 0  | 1   | 1      | 0       | 0        | 0       | 0         | 0         | 0         |
+| **D5**    | 0   | 0   | 0   | 2  | 1   | 0  | 0   | 0   | 0  | 0      | 0 | 0  | 0   | 0      | 0       | 0        | 0       | 0         | 0         | 0         |
+
+Vi kan allerede intuitivt se at D1 og D3 handler om katte, D2 om en hund, og D4 og D5 om køretøjer.
+
+## Beregning af Distance Measures
+
+Dokumentvektorer: Vi repræsenterer dokumenter som vektorer. Når vi skriver fif_i
+fi​, refererer vi til dokument nummer i. Dette er ikke et enkelt tal, men en hel vektor - tænk på det som en liste af tal. Hvis vores ordbog har 3000 ord, så er fif_i
+fi​ en liste med 3000 tal, hvor hvert tal viser hvor mange gange det pågældende ord forekommer i dokument i.
+
+
+Indeksering: Når vi skriver firf_{ir}
+fir​, betyder det "værdien på position r i dokument i's vektor". Her er i dokumentnummeret, og r er ordnummeret. Så hvis f23f_{23}
+f23​ = 5, betyder det at dokument 2 indeholder ord nummer 3 præcis fem gange.
+
+Dimensionalitet m: Symbolet m repræsenterer det totale antal forskellige ord i hele corpus. Dette er længden af hver dokumentvektor. Hvis vores corpus har 3000 forskellige ord på tværs af alle dokumenter, er m = 3000, og hver dokumentvektor har 3000 elementer.
+
+Summation: Symbolet ∑\sum
+∑ (sigma) betyder "læg sammen". Når vi skriver ∑r=1m\sum_{r=1}^{m}
+∑r=1m​, betyder det "start ved r=1, og læg sammen for hver værdi af r indtil du når m". Det er en kompakt måde at skrive "tag det første ord, plus det andet ord, plus det tredje ord... fortsæt til du har medregnet alle m ord".
+
+Lad os nu beregne distances mellem dokumenter med de tre vigtigste metoder. Jeg vil sammenligne D1 og D3 (begge katte-dokumenter) samt D1 og D4 (kat vs. bil).
+
+Euclidean Distance (L2)
+
+
+$$
+L_2(f_i, f_j) = \sum_{r=1}^{m} (f_{ir} - f_{jr})^2
+$$
+
+Lag 1: (fir−fjr)(f_{ir} - f_{jr})
+(fir​−fjr​)Dette er det inderste element. For hvert enkelt ord r tager vi forskellen mellem hvor mange gange ordet optræder i dokument i versus dokument j. Hvis "demokrati" optræder 10 gange i dokument i og 3 gange i dokument j, bliver denne forskel 10 - 3 = 7 for det pågældende ord.
+
+Lag 2: (fir−fjr)2(f_{ir} - f_{jr})^2
+(fir​−fjr​)2Nu tager vi forskellen fra lag 1 og opløfter den i anden potens - vi ganger den med sig selv. Dette tjener to formål. For det første bliver alle tal positive (både -7 og +7 bliver til 49), så det er lige meget om dokument i har flere eller færre af ordet end dokument j. For det andet vægter vi store forskelle hårdere end små forskelle. En forskel på 10 giver 100, mens to forskelle på 5 kun giver 25 + 25 = 50. Dette betyder at Euclidean distance straffer store uoverensstemmelser hårdere end mange små uoverensstemmelser.
+
+Lag 3: ∑r=1m(fir−fjr)2\sum_{r=1}^{m} (f_{ir} - f_{jr})^2
+∑r=1m​(fir​−fjr​)2Her summerer vi over alle ord. Vi tager den kvadrerede forskel for ord 1, plus den kvadrerede forskel for ord 2, plus ord 3, og fortsætter gennem hele ordbogen til vi når ord m. Dette giver os et enkelt tal der repræsenterer den totale uoverensstemmelse mellem de to dokumenter på tværs af alle ord.
+
+Lag 4: ...\sqrt{...}
+...​
+Til sidst tager vi kvadratroden af hele summen. Dette er en teknisk korrektion der giver os tilbage til den oprindelige skala. Fordi vi kvadrerede alle forskellene i lag 2, ville vores distance-mål være i "kvadrerede ord-counts" som ikke er særlig intuitiv. Kvadratroden bringer os tilbage til den samme skala som de oprindelige frekvenser.
+Geometrisk intuition: Forestil dig at hvert dokument er et punkt i et m-dimensionelt rum, hvor hver dimension repræsenterer et ord. Euclidean distance måler simpelthen den lige linje mellem to punkter - den korteste distance gennem rummet. Hvis du kun havde to ord, kunne du tegne dette på papir som to punkter i et 2D koordinatsystem, og Euclidean distance ville være længden af den rette linje mellem dem.
+
+
+Et konkret eksempel der illustrerer alle dele
+Lad os tage et ultra-simpelt eksempel med kun tre ord: "kat", "hund", "bil".
+Dokument A: "kat kat hund" → vektor [2, 1, 0]
+Dokument B: "kat hund hund" → vektor [1, 2, 0]
+Dokument C: "bil bil bil" → vektor [0, 0, 3]
+Euclidean mellem A og B:
+(fA,kat−fB,kat)2=(2−1)2=1(f_{A,kat} - f_{B,kat})^2 = (2-1)^2 = 1
+(fA,kat​−fB,kat​)2=(2−1)2=1
+(fA,hund−fB,hund)2=(1−2)2=1(f_{A,hund} - f_{B,hund})^2 = (1-2)^2 = 1
+(fA,hund​−fB,hund​)2=(1−2)2=1
+(fA,bil−fB,bil)2=(0−0)2=0(f_{A,bil} - f_{B,bil})^2 = (0-0)^2 = 0
+(fA,bil​−fB,bil​)2=(0−0)2=0
+Sum = 1 + 1 + 0 = 2
+$L2(A,B) = \sqrt{2} \approx 1.41$
+
+Mellem D1 og D3:
+Vi gennemgår hver ordposition og beregner forskellen i kvadrat:
+
+katten: (2-2)² = 0
+hunden: (0-0)² = 0
+bilen: (0-0)² = 0
+lastbilen: (0-0)² = 0
+kørte: (0-0)² = 0
+sad: (1-0)² = 1
+sov: (1-0)² = 1
+legede: (0-0)² = 0
+gøede: (0-0)² = 0
+jagtede: (0-1)² = 1
+sprang: (0-1)² = 1
+hurtigt: (0-0)² = 0
+bremsede: (0-0)² = 0
+langsomt: (0-0)² = 0
+stoppede: (0-0)² = 0
+
+Sum = 0 + 0 + 0 + 0 + 0 + 1 + 1 + 0 + 0 + 1 + 1 + 0 + 0 + 0 + 0 = 4
+L2(D1, D3) = √4 = 2.0
+Mellem D1 og D4:
+
+katten: (2-0)² = 4
+hunden: (0-0)² = 0
+bilen: (0-2)² = 4
+lastbilen: (0-0)² = 0
+kørte: (0-1)² = 1
+sad: (1-0)² = 1
+sov: (1-0)² = 1
+legede: (0-0)² = 0
+gøede: (0-0)² = 0
+jagtede: (0-0)² = 0
+sprang: (0-0)² = 0
+hurtigt: (0-1)² = 1
+bremsede: (0-1)² = 1
+langsomt: (0-0)² = 0
+stoppede: (0-0)² = 0
+
+Sum = 4 + 0 + 4 + 0 + 1 + 1 + 1 + 0 + 0 + 0 + 0 + 1 + 1 + 0 + 0 = 13
+L2(D1, D4) = √13 = 3.6
+
+|     | D1  | D2  | D3  | D4  | D5  |
+|-----|-----|-----|-----|-----|-----|
+| **D1** | 0.0 | 3.7 | 2.0 | 3.6 | 3.7 |
+| **D2** | 3.7 | 0.0 | 3.7 | 4.0 | 4.1 |
+| **D3** | 2.0 | 3.7 | 0.0 | 4.0 | 4.1 |
+| **D4** | 3.6 | 4.0 | 4.0 | 0.0 | 2.0 |
+| **D5** | 3.7 | 4.1 | 4.1 | 2.0 | 0.0 |
+
+
+## Cosine Distance
+
+$$
+CD(f_i, f_j) = 1 - \frac{\sum_{r=1}^{m} f_{ir} f_{jr}}{\sqrt{\sum_{r=1}^{m} f_{ir}^2} \, \sqrt{\sum_{r=1}^{m} f_{jr}^2}}
+$$
+
+Del 1 (Tælleren): ∑r=1mfir⋅fjr\sum_{r=1}^{m} f_{ir} \cdot f_{jr}
+∑r=1m​fir​⋅fjr​
+Dette kaldes dot product eller prikprodukt på dansk. For hvert ord r ganger vi dokument i's frekvens med dokument j's frekvens og summerer over alle ord. Lad os se på hvad dette faktisk gør:
+
+Hvis et ord forekommer hyppigt i begge dokumenter (f.eks. 10 gange i dokument i og 8 gange i dokument j), bidrager det meget til summen (10 × 8 = 80).
+Hvis et ord forekommer hyppigt i det ene dokument men ikke i det andet (10 gange versus 0 gange), bidrager det ingenting (10 × 0 = 0).
+Hvis et ord forekommer sjældent i begge, bidrager det lidt (2 × 1 = 2).
+
+Så dot product belønner overlap - ord der optræder i begge dokumenter øger værdien, især hvis de optræder hyppigt i begge. Ord der kun findes i det ene dokument bidrager slet ikke.
+
+Del 2 (Nævneren, første del): ∑r=1mfir2\sqrt{\sum_{r=1}^{m} f_{ir}^2}
+∑r=1m​fir2​​
+Dette kaldes normen eller længden af vektor fif_i
+fi​. Lad os se hvad det betyder:
+
+
+Vi tager hver frekvens i dokument i og kvadrerer den: hvis "demokrati" forekommer 5 gange, bliver det til 25.
+Vi summerer alle disse kvadrerede frekvenser.
+Vi tager kvadratroden af summen.
+
+Geometrisk set er dette længden af vektoren i det m-dimensionelle rum. Hvis du forestiller dig dokumentet som en pil der peger ud i rummet fra origo (punktet 0,0,0...), måler normen hvor lang denne pil er. Et dokument med mange ord eller højfrekvente ord vil have en lang vektor. Et kort dokument med få ord vil have en kort vektor.
+
+Del 2 (Nævneren, anden del): ∑r=1mfjr2\sqrt{\sum_{r=1}^{m} f_{jr}^2}
+∑r=1m​fjr2​​
+Dette er præcis det samme som forrige del, bare for dokument j i stedet for dokument i. Det er længden af dokument j's vektor.
+Del 3 (Nævneren samlet): ∑r=1mfir2⋅∑r=1mfjr2\sqrt{\sum_{r=1}^{m} f_{ir}^2} \cdot \sqrt{\sum_{r=1}^{m} f_{jr}^2}
+∑r=1m​fir2​​⋅∑r=1m​fjr2​​
+Her ganger vi de to længder sammen. Dette produkt bruges til at normalisere dot product fra del 1. Hvorfor gør vi dette? Fordi dot product naturligt bliver større når vi sammenligner lange dokumenter med mange ord. Ved at dividere med produktet af længderne korrigerer vi for dette, så vi måler ren retningslighed uafhængigt af størrelse.
+
+Del 4 (Brøken samlet): ∑r=1mfir⋅fjr∑r=1mfir2⋅∑r=1mfjr2\frac{\sum_{r=1}^{m} f_{ir} \cdot f_{jr}}{\sqrt{\sum_{r=1}^{m} f_{ir}^2} \cdot \sqrt{\sum_{r=1}^{m} f_{jr}^2}}
+∑r=1m​fir2​​⋅∑r=1m​fjr2​​∑r=1m​fir​⋅fjr​​
+Denne hele brøk kaldes cosine similarity. Den måler cosinus til vinklen mellem de to dokumentvektorer. Værdien ligger altid mellem 0 og 1 for tekstdata (hvor alle frekvenser er ikke-negative):
+
+Værdi 1: Dokumenterne peger i præcis samme retning (vinklen mellem dem er 0 grader). De har identisk ordfordeling, selv om de måske har forskellige længder.
+Værdi 0: Dokumenterne er vinkelrette (90 grader). De har ingen ord til fælles.
+Værdier imellem: Jo højere værdi, jo mere ens er ordfordelingen.
+
+Del 5 (Hele formlen): CD(fi,fj)=1−...CD(f_i, f_j) = 1 - ...
+CD(fi​,fj​)=1−...
+Til sidst trækker vi cosine similarity fra 1 for at lave det om til en distance. Dette vender skalaen:
+
+Hvis cosine similarity = 1 (dokumenter identiske), bliver cosine distance = 0 (ingen afstand).
+Hvis cosine similarity = 0 (dokumenter deler ingen ord), bliver cosine distance = 1 (maksimal afstand).
+
+Dette giver os et distance-mål der er konsistent med Euclidean og Manhattan: lave værdier betyder tæt på hinanden, høje værdier betyder langt fra hinanden.
+
+Geometrisk intuition: Forestil dig to pile der peger ud fra samme punkt (origo). Cosine distance måler vinklen mellem pilene, ikke hvor lange de er. To pile kan pege i samme retning (lille vinkel, lille distance) selv hvis den ene pil er meget længere end den anden. Dette gør cosine distance perfekt til tekst, fordi vi ofte vil sige at et langt dokument og et kort dokument handler om det samme emne, hvis de bruger ordene i samme proportioner.
+
+Cosine mellem A og C:
+Dot product: (2×0)+(1×0)+(0×3)=0(2 \times 0) + (1 \times 0) + (0 \times 3) = 0
+(2×0)+(1×0)+(0×3)=0
+(Ingen ord overlapper!)
+Norm af A: 5≈2.24\sqrt{5} \approx 2.24
+5​≈2.24
+Norm af C: 02+02+32=3\sqrt{0^2 + 0^2 + 3^2} = 3
+02+02+32​=3
+Cosine similarity: 02.24×3=0\frac{0}{2.24 \times 3} = 0
+2.24×30​=0
+Cosine distance: 1−0=11 - 0 = 1
+1−0=1
+Dette viser hvordan cosine distance perfekt fanger at A og B er relaterede (begge om husdyr, distance 0.2), mens A og C er fuldstændig uafhængige (distance 1.0).
 
 
 
+Mellem D1 og D3:
+Først beregner vi dot product (prikprodukt):
+
+katten × katten: 2 × 2 = 4
+Alle andre ord giver 0 (mindst én af frekvenserne er 0)
+Dot product = 4
+
+Så beregner vi længderne (normen) af hver vektor:
+
+||D1|| = √(2² + 1² + 1²) = √6 ≈ 2.45
+||D3|| = √(2² + 1² + 1²) = √6 ≈ 2.45
+
+Cosine similarity = 4 / (2.45 × 2.45) = 4 / 6 = 0.667
+Cosine distance = 1 - 0.667 = 0.333
+Mellem D1 og D4:
+Dot product = 0 (ingen ord overlapper mellem katte-dokument og bil-dokument)
+||D1|| = √6 ≈ 2.45
+||D4|| = √(2² + 1² + 1² + 1²) = √7 ≈ 2.65
+Cosine similarity = 0 / (2.45 × 2.65) = 0
+Cosine distance = 1 - 0 = 1.0
+
+|     | D1  | D2  | D3  | D4  | D5  |
+|-----|-----|-----|-----|-----|-----|
+| **D1** | 0.0 | 1.0 | 0.33 | 1.0 | 1.0 |
+| **D2** | 1.0 | 0.0 | 1.0  | 1.0 | 1.0 |
+| **D3** | 0.33| 1.0 | 0.0  | 1.0 | 1.0 |
+| **D4** | 1.0 | 1.0 | 1.0  | 0.0 | 0.29 |
+| **D5** | 1.0 | 1.0 | 1.0  | 0.29| 0.0 |
 
 
+## K-means Clustering Eksempel
+
+Lad os nu køre k-means med k=3 klynger på samme data.
+Iteration 0 (Random initialisering):
+Tildel dokumenter tilfældigt:
+
+Klynge 1: {D1, D4}
+Klynge 2: {D2}
+Klynge 3: {D3, D5}
+
+Beregn centroids:
+Klynge 1 centroid = gennemsnit af D1 og D4 vektorer:
+
+katten: (2+0)/2 = 1.0
+bilen: (0+2)/2 = 1.0
+kørte: (0+1)/2 = 0.5
+sad: (1+0)/2 = 0.5
+sov: (1+0)/2 = 0.5
+hurtigt: (0+1)/2 = 0.5
+bremsede: (0+1)/2 = 0.5
+(alle andre: 0)
+
+Klynge 2 centroid = D2 vektor (da det er det eneste medlem)
+Klynge 3 centroid = gennemsnit af D3 og D5
+Iteration 1 (Reassignment):
+For hvert dokument beregner vi distance til alle tre centroids og tildeler til nærmeste.
+D1 distance til:
+
+Centroid 1: √[(2-1)² + (0-1)² + (1-0.5)² + (1-0.5)² + ...] ≈ 1.7
+Centroid 2: 3.7 (fra distance matrix)
+Centroid 3: √[(2-1)² + (0-1)² + ...] ≈ 2.3
+
+D1 forbliver i Klynge 1.
+Efter at have gennemgået alle dokumenter:
+
+Klynge 1: {D1, D3} (begge katte-dokumenter)
+Klynge 2: {D2} (hund)
+Klynge 3: {D4, D5} (køretøjer)
+
+Iteration 2:
+Genberegn centroids med den nye tildeling. Når vi nu tildeler dokumenter igen baseret på nye centroids, ændrer tildelingen sig ikke. Vi har konvergens!
+Final clustering:
+
+Klynge 1: {D1, D3} - karakteriseret af "katten"
+Klynge 2: {D2} - karakteriseret af "hunden"
+Klynge 3: {D4, D5} - karakteriseret af "kørte", "bilen", "lastbilen"
+
+Within-Cluster Sum of Squares
+For vores finale k-means løsning kan vi beregne kvaliteten:
+Klynge 1: Distance fra D1 og D3 til centroid:
+WCSS₁ = L2(D1, centroid₁)² + L2(D3, centroid₁)² = 1.0² + 1.0² = 2.0
+Klynge 2: D2 er dens egen centroid:
+WCSS₂ = 0
+Klynge 3: Distance fra D4 og D5 til centroid:
+WCSS₃ = L2(D4, centroid₃)² + L2(D5, centroid₃)² = 1.0² + 1.0² = 2.0
+Total WCSS = 2.0 + 0 + 2.0 = 4.0
+Dette tal kan sammenlignes med andre k-værdier for at evaluere clustering-kvalitet.
+Klynge-karakterisering
+Efter clustering kan vi karakterisere hver klynge ved dens mest fremtrædende ord:
+Klynge 1 (Katte):
+
+Gennemsnitlig frekvens: katten=2.0, jagtede=0.5, sprang=0.5, sad=0.5, sov=0.5
+Top ord: "katten" (dominerer klart)
+
+Klynge 2 (Hund):
+
+Gennemsnitlig frekvens: hunden=2.0, legede=1.0, gøede=1.0
+Top ord: "hunden", "legede", "gøede"
+
+Klynge 3 (Køretøjer):
+
+Gennemsnitlig frekvens: kørte=1.0, bilen=1.0, lastbilen=1.0, hurtigt=0.5, bremsede=0.5, langsomt=0.5, stoppede=0.5
+Top ord: "kørte", "bilen", "lastbilen"
+
+## Sprogmodeller 
+En sprogmodel (“language model”) er kort sagt en model til at forudsige ord. Der er tale
+om modeller, der er trænet til at forstå forskellige sprog, og kan derfor både bruges til at
+producere tekst på et bestemt sprog eller analysere opbygningen af en tekst.
+Lidt forsimplet er en sprogmodel en model, som er trænet til at genkende ordtyper,
+entiteter og sætningskonstruktion, som derved kan prædiktere disse informationer i
+tekst (for det meste inden for samme sprog).
+
+“spaCy” indeholder forskellige sprogmodeller - herunder en dansk sprogmodel.
+Overordnet virker spaCy ved, at man specificerer en sprogmodel samt nogen
+“processors”, som modellen skal indeholde.
+SpaCy’s sprogmodeller indeholder blandt andet:
+▶ Tokenizer (inddeling i enkeltord)
+▶ Lemmatizer (konvertering til navneform)
+▶ Part-Of-Speech tagging (POS-tagging) (identificering af ordtyper)
+▶ Dependency parsing (sætningskonstruktion)
+▶ Named-Entity-Recognition (NER) (udledning af “named entities”, fx personer og
+organisationer)
+
+## SpaCy 
+
+Det er værd at placere SpaCy i det bredere økosystem af NLP-værktøjer. NLTK er det klassiske akademiske bibliotek, fantastisk til læring og eksperimentering, men ikke optimeret til produktion. Det er som at sammenligne en detaljeret anatomisk model med en funktionel protese – NLTK viser dig alle detaljer, mens SpaCy giver dig, hvad du har brug for til at løse opgaven.
+
+Gensim specialiserer sig i topic modeling og word embeddings, og er komplementær til SpaCy snarere end konkurrerende. Hugging Face's Transformers-bibliotek er uvurderligt til at arbejde direkte med state-of-the-art sprogmodeller, men mangler SpaCy's lingvistiske pipeline og brugervenlige API.
+
+
+Arkitekturen: Pipeline-tankegangen
+
+▶ Et spaCy pipeline tager én tekst ind og giver et doc-objekt tilbage
+▶ NLP-komponenter kan tilføjes og fjernes (obs på afhængigheder)
+▶ spaCy pipelines er tilgængelige gennem eksisterende sprogmodeller
+
+1. Indlæs sprogmodel
+2. Analysér tekstykke
+3. Inspicér resultater
+Når modellen anvendes på et stykke tekst, kan de forskellige værdier og information,
+som er udledt af teksten, tilgås som attributes (et attribute for token, et for lemma, et for
+part-of-speech-tag osv.).
+
+Når du arbejder med SpaCy, arbejder du fundamentalt med en pipeline. Forestil dig en tekststreng, der bevæger sig gennem en række behandlingsstadier, hvor hvert stadie tilføjer et lag af lingvistisk forståelse. Det er som at se en rådiamant blive slebet – hvert trin afslører mere struktur og detalje.
+Pipeline-arkitekturen starter med råtekst og sender den gennem en række komponenter i en fastlagt rækkefølge. Første stop er tokenization, hvor teksten bliver opdelt i individuelle tokens – ord, tegnsætning og andre meningsfulde enheder. Dette lyder simpelt, men det er forbløffende komplekst. Hvordan ved systemet, at "Dr. Hansen" er to tokens og ikke tre? Hvordan håndteres "don't" – er det ét token eller to? SpaCy's tokenizer bruger en kombination af regelbaserede heuristikker og undtagelseslister til at navigere disse forviklinger.
+Efter tokenization kommer part-of-speech tagging, hvor hvert token får tildelt en ordklasse. Er "flies" et substantiv eller et verbum? Konteksten afgør det, og SpaCy bruger statistiske modeller trænet på annoterede korpera til at træffe disse beslutninger. Disse modeller er typisk baseret på neurale netværk, der ser på omkringliggende tokens for at forudsige den mest sandsynlige tag.
+Næste i rækken er dependency parsing, som afdækker den syntaktiske struktur i sætninger. Her identificerer SpaCy, hvordan ord relaterer til hinanden – hvilket ord er subjektet, hvilket er objektet, hvilke ord modificerer andre ord. Dette repræsenteres som en træstruktur, hvor hvert ord har en grammatisk relation til et andet ord (dets "head"). Dependency parsing er computationelt krævende, men SpaCy bruger en transition-based parser, der er både hurtig og præcis.
+Named entity recognition kommer derefter og identificerer navngivne entiteter i teksten – personer, organisationer, lokationer, datoer, og så videre. Dette er kritisk for mange anvendelser, fra at uddrage information fra nyhedsartikler til at anonymisere følsomme data. SpaCy's NER bruger en neural sequence labeling model, der klassificerer hver token som enten begyndelsen, midten eller uden for en entitet.
+Hele denne pipeline er modulariseret og konfigurbar. Du kan tilføje dine egne komponenter, fjerne dem du ikke har brug for, eller ændre rækkefølgen. Dette gør SpaCy både fleksibelt og effektivt – du betaler kun beregningskost for de komponenter, du faktisk bruger.
+
+Datastrukturerne: Doc, Token og Span
+For at forstå, hvordan SpaCy arbejder i praksis, skal vi forstå dets centrale datastrukturer. Disse er ikke bare passive beholdere for data, men rige objekter med indlejret lingvistisk viden.
+
+Doc-objektet er SpaCy's fundamentale enhed. Når du sender en tekst gennem SpaCy's pipeline, får du et Doc-objekt tilbage. Dette er en sekvens af tokens med al den lingvistiske information, pipeline'n har tilføjet. Men Doc er designet smart – det gemmer tokens effektivt i hukommelsen som arrays af heltals-ID'er frem for strenge, hvilket gør det både hurtigt og hukommelseseffektivt.
+
+Hvert Token-objekt i Doc'en repræsenterer en tekstenhed og giver adgang til et væld af attributter. Du kan spørge et token om dets originalform, dets lemma (grundform), dets ordklasse, dets syntaktiske rolle, om det er en del af en navngiven entitet, og meget mere. Det elegante er, at alle disse attributter er beregnede under pipeline-processeringen og blot tilgås når du har brug for dem.
+
+Span-objekter repræsenterer sammenhængende sekvenser af tokens. En sætning er en span, en navngiven entitet er en span, en frase er en span. Spans arver mange af de samme egenskaber som tokens, men opererer på et højere niveau. Du kan for eksempel spørge en span om dens root token eller få dens vektor-repræsentation som gennemsnittet af dens token-vektorer.
+Det der gør disse strukturer særligt kraftfulde er deres indbyrdes koblinger. Et token ved, hvilket Doc det tilhører, hvilket Span det er en del af, og hvilket token der er dets syntaktiske head. Dette skaber et netværk af relationer, der gør det elegant at navigere og analysere tekst.
+
+Sprogmodellerne: Hjernen bag operationen
+SpaCy's intelligens kommer fra dets sprogmodeller. Disse er ikke inkluderet i basisinstallationen, men downloades separat. Dette designvalg giver mening når du tænker på, at modeller kan være hundredvis af megabytes store, og forskellige brugere har brug for forskellige sprog og præcisionsniveauer.
+
+SpaCy tilbyder typisk modeller i tre størrelser for hvert sprog. De små modeller er kompakte og hurtige, egnede til applikationer hvor hastighed er kritisk. De mellemstore modeller balancerer hastighed og præcision. De store modeller prioriterer præcision og inkluderer word vectors – numeriske repræsentationer af ord, der fanger semantiske relationer.
+
+Lad mig illustrere, hvad der faktisk er i en sprogmodel. For et sprog som engelsk inkluderer modellen først et vocabulary – et leksikon over alle tokens, modellen kender, hver med en unik ID. Dette gør token-lookup ekstremt hurtigt. Dernæst er der de trænede vægte for de neurale netværk, der driver part-of-speech tagging, dependency parsing og named entity recognition. Disse vægte repræsenterer millioner af parametre, lært fra store annoterede korpera.
+
+For modeller, der inkluderer word vectors, er der en matrix hvor hver række er en høj-dimensional vektor for et ord. Disse vectors er typisk trænet på enorme mængder råtekst ved hjælp af algoritmer som Word2Vec eller GloVe, og de fanger fascinerende semantiske relationer. Vektoren for "konge" minus vektoren for "mand" plus vektoren for "kvinde" giver en vektor tæt på "dronning" – den berømte analogi, der illustrerer, at vektorerne har lært abstrakte begreber.
+
+Moderne SpaCy-modeller kan også inkludere transformer-baserede komponenter. Transformers som BERT har revolutioneret NLP ved at give kontekst-følsomme repræsentationer – betydningen af "bank" ændrer sig afhængigt af om vi taler om en finansiel institution eller en flodbred, og transformers fanger dette ved at se på hele sætningskonteksten.
+
+## Praksis 
+
+Installation af SpaCy sker gennem pip, men husk at du også skal downloade en sprogmodel. For dansk ville du typisk køre pip install spacy efterfulgt af python -m spacy download da_core_news_sm for den lille danske model. Hvis du arbejder med engelsk, ville da_core_news_sm blive erstattet med en_core_web_sm eller en større variant.
+
+Når SpaCy er installeret, starter vi med at importere biblioteket og indlæse vores sprogmodel. Koden ser således ud:
+
+```{python}
+import spacy
+
+# Indlæs den danske sprogmodel
+nlp = spacy.load("da_core_news_sm")
+```
+
+Dette nlp-objekt er nu vores pipeline. Det ser simpelt ud, men bag scenen har SpaCy nu initialiseret alle pipeline-komponenter, indlæst de neurale netværk, og er klar til at behandle tekst. Objektet hedder traditionelt nlp i SpaCy-verdenen, en konvention der gør kode på tværs af projekter let at læse.
+
+Nu kan vi processere tekst. Lad os tage en sætning og se, hvad SpaCy kan fortælle os:
+
+```{python}
+# Processer en tekst gennem pipeline'n
+doc = nlp("Dronning Margrethe besøgte Aarhus Universitet i går.")
+
+# Undersøg tokenization
+for token in doc:
+    print(f"Token: {token.text}, Lemma: {token.lemma_}, POS: {token.pos_}")
+```
+
+Dette simple loop afslører allerede meget. For hvert token får vi originalformen, lemmaet (grundformen), og ordklassen. "besøgte" får lemmaet "besøge", og POS-tagget VERB. "Aarhus" og "Universitet" bliver korrekt genkendt som proprier. Bemærk at attributter med en underscore-endelse returnerer strenge, mens versioner uden underscore returnerer ID'er.
+
+Men SpaCy kan meget mere. Lad os udforske de syntaktiske relationer:
+
+```{python}
+# Undersøg dependency-strukturen
+for token in doc:
+    print(f"{token.text} <- {token.dep_} <- {token.head.text}")
+```
+
+Her ser vi, hvordan hvert ord relaterer til dets syntaktiske overord. "besøgte" vil typisk være roden af sætningen, med "Dronning" som dens subjekt og "Universitet" som dens objekt. Disse relationer følger Universal Dependencies-standarden, hvilket gør dem konsistente på tværs af sprog.
+
+Named entity recognition bliver tilgået gennem doc's ents-attribut:
+
+```{python}
+# Find navngivne entiteter
+for ent in doc.ents:
+    print(f"Entitet: {ent.text}, Type: {ent.label_}")
+```
+
+SpaCy vil identificere "Dronning Margrethe" som en person, "Aarhus Universitet" som en organisation, og "i går" som en temporal reference. Dette er utroligt nyttigt for informationsudtræk.
+
+Lad mig vise et mere avanceret eksempel, hvor vi analyserer en længere tekst og uddrage specifik information:
+
+```{python}
+# En længere tekst til analyse
+tekst = """
+Apple Inc. annoncerede i går deres kvartalstall. CEO Tim Cook 
+fortalte investorer, at virksomheden havde solgt 50 millioner 
+iPhone-enheder i kvartalet. Aktiekursen steg med 5% på NYSE.
+"""
+
+doc = nlp(tekst)
+
+# Udtræk organisationer og personer
+organisationer = [ent.text for ent in doc.ents if ent.label_ == "ORG"]
+personer = [ent.text for ent in doc.ents if ent.label_ == "PER"]
+
+print(f"Organisationer fundet: {organisationer}")
+print(f"Personer fundet: {personer}")
+
+# Find alle tal med deres kontekst
+for token in doc:
+    if token.like_num:  # Er dette token et tal?
+        # Find omkringliggende kontekst
+        kontekst = doc[max(0, token.i-3):min(len(doc), token.i+4)]
+        print(f"Tal: {token.text}, Kontekst: {kontekst.text}")
+```
+
+Dette viser SpaCy's styrke til mønstergenkendelse og informationsudtræk. Vi kan let filtrere entiteter efter type, bruge lingvistiske features som like_num til at finde numeriske værdier, og navigere tekstens struktur ved hjælp af token-indices.
+
+Avancerede funktioner: Similarity og matching
+SpaCy bliver rigtigt kraftfuldt, når vi bevæger os ind i semantisk analyse. Hvis du bruger en model med word vectors, kan du sammenligne betydninger:
+
+```{python}
+# Indlæs en model med word vectors (en større model)
+nlp = spacy.load("en_core_web_md")
+
+# Sammenlign semantisk lighed
+doc1 = nlp("I love programming")
+doc2 = nlp("I enjoy coding")
+doc3 = nlp("I hate vegetables")
+
+print(f"Doc1 vs Doc2: {doc1.similarity(doc2)}")  # Høj score
+print(f"Doc1 vs Doc3: {doc1.similarity(doc3)}")  # Lav score
+```
+
+Similarity-funktionen bruger cosinus-afstanden mellem vektor-repræsentationer. For dokumenter beregnes vektoren som gennemsnittet af alle token-vektorer, hvilket giver et overordnet semantisk fingeraftryk. Dette er nyttigt til opgaver som dokument-clustering eller semantisk søgning.
+
+Integration med moderne NLP: Transformers og mere
+I de seneste år har SpaCy omfavnet transformer-revolution. Du kan nu bruge biblioteket spacy-transformers til at integrere modeller som BERT, RoBERTa eller XLM-RoBERTa direkte i din SpaCy-pipeline:
+
+```{python}
+# Installation: pip install spacy-transformers
+# Download transformer model: python -m spacy download en_core_web_trf
+
+nlp = spacy.load("en_core_web_trf")
+
+# Samme API, men nu med transformer power
+doc = nlp("This sentence uses contextual embeddings.")
+
+# Hver token har nu en kontekst-sensitiv repræsentation
+```
+
+Transformers giver dramatisk bedre præcision på mange opgaver, fordi de fanger langdistance-dependencies og kontekstuelle nuancer, som traditionelle modeller misser. Omkostningen er beregningstid – transformer-modeller er betydeligt langsommere, men for mange applikationer er trade-off'et værd det.
+
+
+## Teori 
+
+Access to greater volumes of data—and more complex data, such as text (as
+well as maps, images, and audio)—has necessitated more theory, not less
+(Bonikowski & Nelson, 2022)
+
+▶ Udvælgelse af corpus
+▶ Valg i pre-processing
+▶ Udvalg af ord til at måle koncepter (i dictionaries)
+▶ Manuel kategorisering af tekster
+▶ Fortolkning af tekstgrupperinger og ordforbindelser
+▶ Validering
+
+Corpus som en stikprøve
+▶ Corpus som en bestemt "genre-> Kræver domæneviden!
+▶ Hvad og hvem repræsenterer data?
+▶ Computationel tekstanalyse involverer ofte genanvendelse -> Data skabt til andet
+formål end forskning
+Indsamling af relevant data
+▶ For eksisterende samlinger og arkiver: Hvem har samlet det? Hvad repræsenterer
+det?
+▶ For sociale medier: Hvad er tilladt? Hvad kan man få adgang til? Hvad mangler?
+Hvem "taler"?
+▶ Selektionsproblemer
+▶ Mangel på baggrundsoplysninger
+
+Match mellem forskningsspørgsmål og metode
+▶ Flere modeller og metoder kan opnå mere eller mindre det samme teknisk set
+▶ Metodens brugbarhed skal evalueres ift. problemstillingen og den teoretiske
+indsigt, som man ønsker at opnå med metoden
+▶ Problemstillingen skal derfor altid være styrende for metodevalget (ikke omvendt)
+Kombination af metoder og teknikker
+▶ Ofte kræver computationel tekstanalyse en kombination af flere metoder og
+teknikker
+▶ Fx brug af sprogmodel til pre-processing -> inddeling af tekster i grupper -> test af
+sammenhæng mellem baggrundsvariable for tekster og gruppering
+▶ Formålet med kombination af metoder er ikke at belyse data fra flere vinkler, men
+at sammensætte meningsfulde workflows
+[T]urning text into data involves a cascade of interlocking path-dependent choi-
+ces and so it is rare that particular choices will be right or wrong without the
+context of choices made before and after. (Evans, 2022)
+▶ Ofte iterativ og abduktiv proces
+▶ Deduktivt: Udlede specifikt koncept i corpus (dictionaries, superviseret maskinlæring)
+▶ Induktivt: I hvilke kontekster optræder det specifikke koncept i corpus (usuperviseret
+maskinlæring, topic modelling)
+
+
+Brug af eksisterende modeller og ressourcer
+▶ Tilgængelighed af sprogressourcer (corpora, modeller, dictionaries) skaber bedre
+muligheder for computationel tekstanalyse.
+▶ Eksisterende sprogressourcer er dog altid lavet af nogen med noget.
+▶ Hvem har lavet det?
+▶ Hvad er deres kvalifikationer?
+▶ Hvor godt er det beskrevet?
+▶ Hvilke data og ressourcer er blevet brugt? Hvor stammer de fra?
+▶ Selv de bedste sprogressourcer er afhængige af, at andre har lagt meget arbejde i
+manuel annotering
+
+
+Validering i computationel tekstanalyse et spørgsmål om
+gennemskuelighed
+▶ Valg af corpus og hvad det repræsenterer
+▶ Valg i databehandling og hvorfor
+▶ Valg af metode og hvad det skal indfange
+▶ Hvordan resultater er valideret
+
+
+Principper for automatiseret tekstanalyse (Grimmer & Stewart, 2013)
+▶ Quantitative methods augment humans, not replace them
+▶ There is no globally best method for automated text analysis
+▶ Validate, validate, validate
+I computationel tekstanalyse er det ofte tilfældet, at både data og metoder er taget fra
+andre discipliner eller ikke fra en forskningskontekst - kræver omhu, validering og
+kobling til samfundsvidenskabelig teori!
 
 
 
