@@ -154,11 +154,13 @@ samfundsvidenskabelige analyser.
 
 > Forestil dig, at du skal lære et barn at genkende forskellige dyrearter. Den mest oplagte måde ville være at vise barnet billeder af dyr, hvor du hver gang siger: "Det her er en hund", "Det her er en kat", osv. Efter at have set mange eksempler kan barnet begynde at genkende nye dyr, det ikke har set før.
 
+::: {style="font-size: 0.8em;"}
 :::{.incremental}
 * I superviseret læring giver vi computeren et træningsdatasæt, hvor hver tekst allerede er blevet mærket eller kategoriseret af mennesker.
 * Hvis vi for eksempel vil bygge et system til at klassificere filmanmeldelser som positive eller negative, starter vi med at give computeren tusindvis af anmeldelser, hvor vi på forhånd har markeret hver enkelt som enten positiv eller negativ. **Computeren lærer så at finde de sproglige mønstre, der karakteriserer hver kategori.**
 * De mest almindelige superviserede metoder til tekstanalyse omfatter klassifikationsalgoritmer som **Naive Bayes**, Support Vector Machines og neurale netværk. 
 * En vigtig pointe er, at kvaliteten af den superviserede model er dybt afhængig af kvaliteten og omfanget af de "labeled" data, vi træner den med.
+:::
 :::
 
 ## Naive Bayes klassifikation: *læring gennem sandsynlighedsteori*
@@ -226,16 +228,18 @@ Forstil jer at vi har trænet en model på tusindvis af filmanmeldelser, og vi s
 :::
 :::
 
-# Live eksempel på Naive Bayes
+# Naive Bayes live
 
 ## Usuperviserede metoder: *Selvstændig opdagelse*
 
 > Nu forestiller dig i stedet, at du giver barnet en stor kasse med forskellige legetøjsting uden at fortælle noget om dem. Barnet vil naturligt begynde at sortere tingene i bunker baseret på ligheder, det selv opdager: det kunne fx lægger alle røde ting sammen, eller alle ting med hjul. **Barnet opdager strukturer uden vejledning**. 
 
+::: {style="font-size: 0.8em;"}
 ::: {.incremental}
 * I usuperviserede metoder giver vi computeren tekster uden forhåndsmærkninger. 
 * Vi "beder" smaskinen om selv at opdage mønstre, grupperinger eller strukturer i materialet. **Computeren kigger på, hvilke ord der optræder sammen, hvilke dokumenter der ligner hinanden, eller hvilke latente temaer der går igen i samlingen af tekster.**
 * Typiske usuperviserede metoder inkluderer **topic modeling** som Latent Dirichlet Allocation, hvor computeren identificerer skjulte temaer på tværs af dokumenter, **clustering-algoritmer** som **$k$-means**, der grupperer lignende dokumenter sammen, og word embeddings som Word2Vec, der lærer at repræsentere ord baseret på deres kontekstuelle anvendelse.
+:::
 :::
 
 ## $K$-means clustering: *geometrisk optimering*
@@ -243,6 +247,23 @@ Forstil jer at vi har trænet en model på tusindvis af filmanmeldelser, og vi s
 Hvor Naive Bayes arbejder med sandsynligheder og kræver labelet data, virker $k$-means clustering fundamentalt anderledes. 
 
 > Vi skal forestille os at vi har tusindvis af dokumenter spredt ud i et **højdimensionalt rum**, hvor hver dimension repræsenterer et ord eller en tekstfunktion. $K$-means forsøger at finde naturlige grupperinger i dette rum ved at minimere afstanden mellem dokumenter i samme gruppe.
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 1.0em;"}
+```
+y
+│
+0.4  •d1 •d2
+│
+0.3                    •d3
+│
+0.2                            •d4
+│
+└──────────────────────────────── x
+    -0.6   -0.5       0.7   0.8
+```
+:::
+:::
 
 ---
 
@@ -364,49 +385,6 @@ $$
 
 * Begge (typer af) metoder transformerer tekst til **numeriske repræsentationer**, som computeren kan arbejde med. Denne transformation sker gennem teknikker som bag-of-words og TF-IDF vægtning.
 * Begge tilgange kræver betydelige mængder data for at fungere godt. Jo mere tekst vi fodrer metoderne med, desto bedre bliver de til at fange sprogets nuancer. 
-
-# Udfordringerne i computationel tekstanalyse
-
-## Det skrevne sprog er ikke entydigt!
-
-> Jeg elsker politik
-
-> Jeg elsker ikke politik
-
-> Jeg elsker politik, når folk råber i munden på hinanden
-
-> Jeg elsker politik, når folk råber i munden på hinanden. Først da kan jeg mærke, hvor passionerede politikerne er.
-
----
-
-> Tim valgte kort før Allan.
-
-* Valgte Tim kort i et spil, før Allan valgte kort?
-* Valgte Tim et eller andet lige inden, at Allan valgte noget?
-* Valgte Tim kort inden han valgte Allan?
-
-## Dimensionalitetsreduktion
-
-Tekstdata har altid høj dimensionalitet (mange variable)
-
-* Høj dimensionalitet gør det vanskeligere at opsummere data simpelt, og mange **modeller har svært ved at håndtere det**.
-* Høj dimensionalitet bevirker typisk også **høj sparsity** (mange $0$-tællinger), som også er en udfordring for mange modeller og metoder.
-* Ikke blot ordene i teksten, men også **sætningskonstruktion** (syntaks) og ordenes **betydning** (semantik) er nødvendige for at kunne opsummere teksten fyldestgørende
-* Derudover kan der være **faktorer, som går ud over teksten i sig selv**, der kan være relevante for, hvordan den skal forstås (historisk kontekst, forfatter, medie osv.)
-
-## Tekstdata er vanskelige at standardisere
-
-* **Gradbøjning**: vælge, vælger, valgte
-* **Ens stavemåder**: en vælger (navneord), han vælger (verbum)
-* **Alternative stavemåder**: ressource, resurse
-* **Synonymer**: stille, sagte
-* Forskellig semantisk “vægt”: hvor relevant er ordet for teksten?
-
-## Tekstdata har ikke en given datastruktur
-
-* Opgjort på ord, sætninger, afsnit?
-* Tællinger? Vægtning?
-* Sammenlignes tekster, ord, ordforbindelser, kontekst?
 
 # Repræsentation af tekstdata 
 
@@ -771,6 +749,51 @@ Dependency parsing udleder sætningskonstruktion: grundled, udsagnsled, genstand
 * Hjælper til at reducere tvetydighed i tekst: “hvem gjorde hvad til hvem?”
 * Brugbart til at udlede meningsfulde dele af teksten (fx fokusere på visse ord, der indgår som genstandsled i sætninger).
 * Er nødt til at være sprogafhængige og kontekstafhængige (fleste er baseret på maskinlæring i dag).
+
+# Text tokenization live
+
+# Udfordringerne i computationel tekstanalyse
+
+## Det skrevne sprog er ikke entydigt!
+
+> Jeg elsker politik
+
+> Jeg elsker ikke politik
+
+> Jeg elsker politik, når folk råber i munden på hinanden
+
+> Jeg elsker politik, når folk råber i munden på hinanden. Først da kan jeg mærke, hvor passionerede politikerne er.
+
+---
+
+> Tim valgte kort før Allan.
+
+* Valgte Tim kort i et spil, før Allan valgte kort?
+* Valgte Tim et eller andet lige inden, at Allan valgte noget?
+* Valgte Tim kort inden han valgte Allan?
+
+## Dimensionalitetsreduktion
+
+Tekstdata har altid høj dimensionalitet (mange variable)
+
+* Høj dimensionalitet gør det vanskeligere at opsummere data simpelt, og mange **modeller har svært ved at håndtere det**.
+* Høj dimensionalitet bevirker typisk også **høj sparsity** (mange $0$-tællinger), som også er en udfordring for mange modeller og metoder.
+* Ikke blot ordene i teksten, men også **sætningskonstruktion** (syntaks) og ordenes **betydning** (semantik) er nødvendige for at kunne opsummere teksten fyldestgørende
+* Derudover kan der være **faktorer, som går ud over teksten i sig selv**, der kan være relevante for, hvordan den skal forstås (historisk kontekst, forfatter, medie osv.)
+
+## Tekstdata er vanskelige at standardisere
+
+* **Gradbøjning**: vælge, vælger, valgte
+* **Ens stavemåder**: en vælger (navneord), han vælger (verbum)
+* **Alternative stavemåder**: ressource, resurse
+* **Synonymer**: stille, sagte
+* Forskellig semantisk “vægt”: hvor relevant er ordet for teksten?
+
+## Tekstdata har ikke en given datastruktur
+
+* Opgjort på ord, sætninger, afsnit?
+* Tællinger? Vægtning?
+* Sammenlignes tekster, ord, ordforbindelser, kontekst?
 
 # Sprogmodeller 
 
@@ -1155,7 +1178,7 @@ plt.show()
 
 ---
 
-### Eksempel: Analyser kønsassociationer med karrierer
+#### Eksempel: Analyse af kønsassociationer med karrierer
 
 * Brug word embeddings (ordvektorer) til at undersøge implicitte kønsassociationer i sproget. 
 * Måler hvor meget en karriere-vektor "peger" i samme retning som køns-aksen
