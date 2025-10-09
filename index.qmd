@@ -154,7 +154,7 @@ samfundsvidenskabelige analyser.
 
 > Forestil dig, at du skal lære et barn at genkende forskellige dyrearter. Den mest oplagte måde ville være at vise barnet billeder af dyr, hvor du hver gang siger: "Det her er en hund", "Det her er en kat", osv. Efter at have set mange eksempler kan barnet begynde at genkende nye dyr, det ikke har set før.
 
-::: {style="font-size: 0.8em;"}
+::: {style="font-size: 0.6em;"}
 :::{.incremental}
 * I superviseret læring giver vi computeren et træningsdatasæt, hvor hver tekst allerede er blevet mærket eller kategoriseret af mennesker.
 * Hvis vi for eksempel vil bygge et system til at klassificere filmanmeldelser som positive eller negative, starter vi med at give computeren tusindvis af anmeldelser, hvor vi på forhånd har markeret hver enkelt som enten positiv eller negativ. **Computeren lærer så at finde de sproglige mønstre, der karakteriserer hver kategori.**
@@ -175,8 +175,14 @@ $$
 
 Sætningen fortæller os, hvordan vi kan vende en betinget sandsynlighed om. Hvis vi kalder vores kategorier for $C$ ("positiv" eller "negativ") og vores dokument for $D$ (repræsenteret ved de ord, det indeholder), så siger Bayes' sætning:
 
+---
+
+$$
+P(C \mid D) = \frac{P(D \mid C) \times P(C)}{P(D)}
+$$
+
 ::: {style="font-size: 0.8em;"}
-1. $P(C \mid D)$ er den **posterior sandsynlighed**: sandsynligheden for, at dokumentet tilhører kategori C, givet at vi har observeret ordene i D.Det er altså hvad vi vil finde ud af. 
+1. $P(C \mid D)$ er den **posterior sandsynlighed**: sandsynligheden for, at dokumentet tilhører kategori $C$, givet at vi har observeret ordene i $D$. Det er altså hvad vi vil finde ud af. 
 2. $P(D \mid C)$ er vores **likelihood**: sandsynligheden for at se netop denne kombination af ord, hvis vi ved, at dokumentet tilhører kategori $C$. 
 3. $P(C)$ er **prior sandsynligheden**: vores forhåndsforventning om, hvor sandsynlig kategorien er, før vi har set dokumentet. $P(D)$ er en normaliseringskonstant, der sikrer, at sandsynlighederne summerer til én.
 :::
@@ -218,7 +224,7 @@ Forstil jer at vi har trænet en model på tusindvis af filmanmeldelser, og vi s
 
 ::: {style="font-size: 0.8em;"}
 ::: {.incremental}
-3. Nu kan vi beregne den unormaliserede posterior sandsynlighed for positiv kategori:
+3. Nu kan vi beregne den unormaliserede **posterior sandsynlighed** for positiv kategori:
     * $P(P \mid D) \propto P(P) \times P(\text{fantastisk} \mid P) \times P(\text{film} \mid P) \times P(\text{elsker} \mid P)$
     * $P(P \mid D) \propto 0.6 \times 0.08 \times 0.15 \times 0.09 = 0.0006480$
 4. Tilsvarende for negativ kategori:
@@ -234,7 +240,7 @@ Forstil jer at vi har trænet en model på tusindvis af filmanmeldelser, og vi s
 
 > Nu forestiller dig i stedet, at du giver barnet en stor kasse med forskellige legetøjsting uden at fortælle noget om dem. Barnet vil naturligt begynde at sortere tingene i bunker baseret på ligheder, det selv opdager: det kunne fx lægger alle røde ting sammen, eller alle ting med hjul. **Barnet opdager strukturer uden vejledning**. 
 
-::: {style="font-size: 0.8em;"}
+::: {style="font-size: 0.6em;"}
 ::: {.incremental}
 * I usuperviserede metoder giver vi computeren tekster uden forhåndsmærkninger. 
 * Vi "beder" smaskinen om selv at opdage mønstre, grupperinger eller strukturer i materialet. **Computeren kigger på, hvilke ord der optræder sammen, hvilke dokumenter der ligner hinanden, eller hvilke latente temaer der går igen i samlingen af tekster.**
@@ -270,7 +276,7 @@ y
 ### Geometriske fundament: *Afstand og centrum*:
 
 ::: {style="font-size: 0.8em;"}
-1: Hvert dokument er repræsenteret som en vektor i et højdimensionalt rum. Hvis vi bruger en `bag-of-words` repræsentation med $N$ unikke ord, bliver hvert dokument en vektor $d = (d_1, d_2, \cdots , d_n)$, hvor $d_n$ er en vægt. 
+1. Hvert dokument er repræsenteret som en vektor i et højdimensionalt rum. Hvis vi bruger en `bag-of-words` repræsentation med $N$ unikke ord, bliver hvert dokument en vektor $d = (d_1, d_2, \cdots , d_n)$, hvor $d_n$ er en vægt. 
 
 2. For det andet definerer vi afstand mellem dokumenter ved hjælp af **euklidisk afstand**. Afstanden mellem to dokumenter $d$ og $d'$ er:
 
@@ -318,7 +324,7 @@ $^*$ *I virkeligheden ville vi have hundredvis eller tusindvis af dimensioner, m
 *Et centralt spørgsmål i $k$-means er, hvordan vi vælger antallet af clusters $k$.* 
 
 * En udbredt tilgang er elbow-metoden, hvor vi kører $k$-means for forskellige værdier af $k$ og **plotter WCSS som funktion af** $k$. 
-* WCSS vil altid falde, når k stiger, men vi leder efter det punkt, hvor tilføjelsen af flere clusters giver aftagende gevinster: "albuen" i kurven.
+* WCSS vil altid falde, når $k$ stiger, men vi leder efter det punkt, hvor tilføjelsen af flere clusters giver aftagende gevinster: "albuen" i kurven.
 
 ::: {style="display: flex; justify-content: center; align-items: center;"}
 ::: {style="font-size: 1.0em;"}
@@ -348,22 +354,22 @@ $^*$ *I virkeligheden ville vi have hundredvis eller tusindvis af dimensioner, m
 
 ---
 
-Altså, for at kunne clustre dokumenter skal vi forstå hvordan vi matematisk kan udtrykke hvor meget eller lidt to dokumenter ligner hinanden. 
+1. Altså, for at kunne clustre dokumenter skal vi forstå hvordan vi matematisk kan udtrykke *hvor meget eller lidt to dokumenter ligner hinanden*. 
 
-Hvert dokument bliver repræsenteret som en vektor i et højdimensionelt rum. Hvis vores corpus har $3000$ forskellige ord, bliver hvert dokument en vektor med $3000$ tal der viser hvor ofte hvert ord forekommer. For to dokumenter, $f_i$ og $f_j$, kan vi beregne forskellige **distance measures**.
+2. Hvert dokument bliver **repræsenteret som en vektor i et højdimensionelt rum**. Hvis vores corpus har $3000$ forskellige ord, bliver hvert dokument en vektor med $3000$ tal der viser hvor ofte hvert ord forekommer. For to dokumenter, $f_i$ og $f_j$, kan vi beregne forskellige `distance measures`.
 
 ---
 
-1.  **Euclidean distance** ($L2$): Tænk på det som at måle den rette linje mellem to punkter i rummet. Hvis dokument **A** har ordet "demokrati" $10$ gange og dokument **B** har det $3$ gange, bidrager dette ord med $(10-3)^2 = 49$ til den samlede distance. Læg alle sådanne bidrag sammen for alle ord, og tag kvadratroden. 
+1.  **Euclidean distance** ($L2$): *Tænk på det som at måle den rette linje mellem to punkter i rummet.* Hvis dokument **A** har ordet "demokrati" $10$ gange og dokument **B** har det $3$ gange, bidrager dette ord med $(10-3)^2 = 49$ til den samlede distance. Læg alle sådanne bidrag sammen for alle ord, og tag kvadratroden. 
 $$
 L_2(f_i, f_j) = \sum_{r=1}^{m} (f_{ir} - f_{jr})^2
 $$
 
-2. **Manhattan distance** ($L1$): I stedet for at kvadrere forskellene, tager vi den absolutte værdi af hver forskel og lægger dem sammen. Det giver et andet billede af distance end fugleflugt-linjen (Euclidean).
+2. **Manhattan distance** ($L1$): *I stedet for at kvadrere forskellene, tager vi den absolutte værdi af hver forskel og lægger dem sammen.* Det giver et andet billede af distance end fugleflugt-linjen (Euclidean).
 
 ---
 
-3. **Cosine distance**: måler vinklen mellem deres vektorer. To dokumenter der har præcis samme ordfordeling vil have en vinkel på $0$ grader mellem sig (cosine distance $= 0$), selv hvis det ene dokument er meget længere end det andet. 
+3. **Cosine distance**: *Vi måler vinklen mellem deres vektorer.* To dokumenter der har præcis samme ordfordeling vil have en vinkel på $0$ grader mellem sig (cosine distance $= 0$), selv hvis det ene dokument er meget længere end det andet. 
 
 $$
 CD(f_i, f_j) = 1 - \frac{\sum_{r=1}^{m} f_{ir} f_{jr}}{\sqrt{\sum_{r=1}^{m} f_{ir}^2} \, \sqrt{\sum_{r=1}^{m} f_{jr}^2}}
@@ -373,17 +379,18 @@ $$
 
 ## Forskelle
 
-* Naive Bayes lever i sandsynlighedsteorien verden: givet en kategori, hvad er **sandsynligheden** for at **generere** netop disse ord? Dette gør den til en probabilistisk model, hvor output altid er sandsynligheder, der kan fortolkes direkte.
+* Naive Bayes lever i `sandsynlighedsteorien` verden: givet en kategori, hvad er **sandsynligheden** for at **generere** netop disse ord? Dette gør den til en probabilistisk model, hvor output altid er *sandsynligheder, der kan fortolkes direkte*.
     * Naive Bayes vil have problemer med stærkt korrelerede features og kan fejlberegne, hvis dens uafhængighedsantagelse er for groft overtrådt. 
 
 ---
 
-* $K$-means derimod er deterministisk og geometrisk. Sandsynligheder spiller ikke en rolle, da det handler om **afstande** i et **vektorrum**. Dens mål er rent metrisk: minimer den samlede kvadrerede afstand mellem punkter og deres cluster-centre. Dette gør den intuitivt lettere at visualisere, men også mere følsom over for valget af afstandsmål.
+* $K$-means derimod er `deterministisk og geometrisk`. Sandsynligheder spiller ikke en rolle, da det handler om **afstande** i et **vektorrum**. Dens mål er rent metrisk: *minimer den samlede kvadrerede afstand mellem punkter og deres cluster-centre.* Dette gør den intuitivt lettere at visualisere, men også mere **følsom over for valget af afstandsmål.**
     * $K$-means kan have "problemer" med overlappende clusters, outliers, eller clusters med vidt forskellige størrelser og former. 
 
 ---
 
-* Begge (typer af) metoder transformerer tekst til **numeriske repræsentationer**, som computeren kan arbejde med. Denne transformation sker gennem teknikker som bag-of-words og TF-IDF vægtning.
+* Begge (typer af) metoder transformerer tekst til **numeriske repræsentationer**, som computeren kan arbejde med. 
+    * Denne transformation sker gennem teknikker som bag-of-words og TF-IDF vægtning.
 * Begge tilgange kræver betydelige mængder data for at fungere godt. Jo mere tekst vi fodrer metoderne med, desto bedre bliver de til at fange sprogets nuancer. 
 
 # Repræsentation af tekstdata 
@@ -394,8 +401,8 @@ $$
     * **Teoretisk udfordring**: Hvordan bevarer vi kontekst for et ord?
     * **Teknisk udfordring**: Hvordan reduceres dimensionalitet uden at miste information om ordets kontekst?
 * Vi anvender termet “`text vectorization`” til at referere til teknikker, der **konverterer tekster til matematiske repræsentationer** (datastrukturer, som man kan foretage beregninger på)
-* **Datastrukturer for tekster ikke givet.**
-    * Datastruktur afhænger både af, hvordan tekst er konverteret til tokens samt af, hvordan ordene skal opgøres (tælles, vægtes eller andet).
+* **Datastrukturer for tekster er ikke givet.**
+    * *Datastruktur afhænger både af, hvordan tekst er konverteret til tokens samt af, hvordan ordene skal opgøres (tælles, vægtes eller andet).*
 
 --- 
 
@@ -406,7 +413,7 @@ udvælgelse)
 2. Hvordan skal tekst repræsenteres? (datastruktur)
 3. Hvordan skal tekst analyseres? (anvendte teknikker, metoder,
 modeller)
-2 og 3 hænger ofte sammen (repræsentation afhænger af analysen,
+***2 og 3 hænger ofte sammen*** (repræsentation afhænger af analysen,
 som skal foretages).
 
 
@@ -532,7 +539,7 @@ OBS: Der kan være variationer i, hvordan tf og idf udregnes, samt forskelle i b
 - TF(kød) $= 1/7 = 0.143$
 - TF(og) $= 1/7 = 0.143$
 - TF(løber) $= 1/7 = 0.143$
-- TF(hurtigt) =$ 1/7 = 0.143$
+- TF(hurtigt) $=1/7 = 0.143$
 
 ---
 
@@ -616,9 +623,9 @@ $$
 
 ::: {.incremental}
 ::: {style="font-size: 0.8em;"}
-* Ordet `"og"` optræder i alle tre dokumenter, hvilket giver det en IDF på præcis nul. Det betyder at uanset hvor mange gange "og" optræder i et dokument, så bliver dets TF-IDF værdi altid nul. Systemet har effektivt lært at ignorere dette almindelige bindeord, præcis som vi mennesker instinktivt gør når vi læser.
-* TF-IDF justerer for både hvor meget plads et ord optager i et dokument og hvor sjældent det er på tværs af hele samlingen. Den fanger den balance mellem lokal vigtighed og global unikhed, som vi intuitivt bruger når vi selv skal bestemme hvilke ord der definerer en teksts indhold. 
-* Et ord kan optræde mange gange og stadig være uvæsentligt hvis det er for almindeligt, og et sjældent ord kan være mindre vigtigt hvis det kun nævnes en enkelt gang tilfældigt. TF-IDF finder de ord hvor både frekvens og sjældenhed peger i samme retning.
+* Ordet `"og"` optræder i alle tre dokumenter, hvilket giver det en IDF på præcis nul. Det betyder at uanset hvor mange gange "og" optræder i et dokument, så bliver dets TF-IDF værdi altid nul. **Systemet har effektivt lært at ignorere dette almindelige bindeord, som vi mennesker instinktivt gør når vi læser.**
+* TF-IDF **justerer for både hvor meget plads et ord optager i et dokument og hvor sjældent det er på tværs af hele samlingen.** Den fanger den balance mellem lokal vigtighed og global unikhed, som vi intuitivt bruger når vi selv skal bestemme hvilke ord der definerer en teksts indhold. 
+* **Et ord kan optræde mange gange og stadig være uvæsentligt hvis det er for almindeligt, og et sjældent ord kan være mindre vigtigt hvis det kun nævnes en enkelt gang tilfældigt.** TF-IDF finder de ord hvor både frekvens og sjældenhed peger i samme retning.
 :::
 :::
 
@@ -630,7 +637,7 @@ $$
 
 **Tekst 3**: *Det skal vi have gjort op med.*
 
-
+::: {style="font-size: 0.6em;"}
 | ID | Word | POS | Order | doc:ID |
 |----|----------|------|-------|-----|
 | 0 | Vi | PRON | 1 | 1 |
@@ -643,9 +650,9 @@ $$
 | 7 | dele | VERB | 4 | 2 |
 | 8 | prisen | NOUN | 5 | 2 |
 | 9 | med | ADP | 6 | 2 |
+:::
 
 ## vectorization: `graf/netværk` 
-
 
 | ID | From | To |
 |----|----------|----------|
@@ -653,20 +660,21 @@ $$
 | 1 | er | utroligt |
 | 1 | utroligt | beærede |
 
+
 ID'et (1) angiver at alle disse forbindelser tilhører den samme sætning.
 
 ---
 
 #### Preprocessing-valg og konsekvenser
 
-Pas på medUkritisk teknologioverførsel:
+Pas på med **ukritisk teknologioverførsel**:
 
   * Preprocessing-råd kommer primært fra supervised learning (klassifikation) og anvendes ukritisk på unsupervised metoder (topic models, scaling)
 
   * ... men disse to tilgange har forskellige mål og evalueringsmetrikker. 
   
 
-::: {style="font-size: 0.8em;"}
+::: {style="font-size: 0.6em;"}
 | Trin | Beskrivelse                     | Potentielle problemer                                       |
 |------|----------------------------------|--------------------------------------------------------------|
 | **P - Punctuation** | Fjern tegnsætning               | Kan være informativ i visse domæner (f.eks. hashtags)         |
@@ -684,6 +692,8 @@ Pas på medUkritisk teknologioverførsel:
 
 Opdeling af tekst til enkelte `tokens` (ordenheder)
 
+<br>
+
 "Politiet har givet borgerne råd" -> `[‘Politiet‘, ‘har‘, ‘givet‘, ‘borgerne‘, ‘råd‘]`
 
 * Evt. frasortering af tegnsætning
@@ -692,6 +702,8 @@ Opdeling af tekst til enkelte `tokens` (ordenheder)
 ## N-grams 
 
 Typisk referer tokenization til at opdele tekster i enkeltord, men afhængig af formål, kan det være relevant at se på tokens som “ordpar” (`bigrams`) eller “ordsamlinger” (`n-grams)`.
+
+<br>
 
 ‘Politiet har givet borgerne råd‘ -> `[(‘Politiet‘, ‘har‘), (‘har‘, ‘givet‘), (‘givet‘, ‘borgerne‘), (‘borgerne‘, ‘råd‘)]`
 
@@ -728,11 +740,13 @@ Mange ord indgår i tekst uanset hvad teksten handler om (bindeord, stedord, for
 
 * Refereres til som “stopord” og frasorteres da de typisk ikke giver indblik i, hvad tekster
 handler om.
-* Stopord kan både være generelle (bindeord, stedord, forholdsord) eller kontekstspecifikke (fx ‘ordfører’ i referater fra Folketinget).
+* **Stopord** kan både være generelle (bindeord, stedord, forholdsord) eller kontekstspecifikke (fx ‘ordfører’ i referater fra Folketinget).
 
 ## POS tagging 
 
 Opdeler ord i ordklasser: navneord, udsagnsord, tillægsord osv.
+
+<br>
 
 ‘Politiet har givet borgerne råd‘ -> `‘Politiet_NOUN har_AUX givet_VERB borgerne_NOUN råd_NOUN‘`
 
@@ -743,6 +757,8 @@ Opdeler ord i ordklasser: navneord, udsagnsord, tillægsord osv.
 
 ## Dependency parsing 
 Dependency parsing udleder sætningskonstruktion: grundled, udsagnsled, genstandsled.
+
+<br>
 
 ‘Politiet har givet borgerne råd‘ -> `‘Politiet_nsubj har_aux givet_ROOT borgerne_obj råd_obj‘`
 
@@ -837,13 +853,13 @@ opposition: [0, 0, 0, 0, 0, 1]
 :::
 
 
-::: {style="font-size: 0.8em;"}
+::: {style="font-size: 0.7em;"}
 ::: {.incremental}
-* **Problem 1**: Ingen semantisk information. Afstanden mellem `"velfærd"` og `"uddannelse"` er nøjagtig den samme som mellem `"velfærd"` og `"forsvar"`. Computeren seks totalt forskellige ord uden nogen relation. Men intuitivt hører velfærd og uddannelse sammen i den sociale politiske sfære, mens forsvar er noget helt andet. 
+* **Problem 1**: Ingen semantisk information. Afstanden mellem `"velfærd"` og `"uddannelse"` er nøjagtig den samme som mellem `"velfærd"` og `"forsvar"`. *Computeren ser seks totalt forskellige ord uden nogen relation.* Men **intuitivt** hører velfærd og uddannelse sammen i den sociale politiske sfære, mens forsvar er noget andet. 
 
 * **Problem 2**: Dimensionalitetseksplosion. Et realistisk ordforråd har $50,000-100,000$ ord. Det betyder vektorer med $50,000-100,000$ dimensioner, hvor $99.999\%$ er nuller. Ekstremt ineffektivt og gør beregninger umulige.
 
-* **Problem 3**: Ingen generalisering. Hvis modellen har lært at `"regeringen øgede velfærdsudgifter"` er positivt korreleret med socialdemokratisk politik, ved den intet om `"administrationen forhøjede sociale udgifter"`,  selvom sætningerne er semantisk identiske. Hvert ord behandles som totalt uafhængigt.
+* **Problem 3**: Ingen *generalisering*. Hvis modellen har lært at `"regeringen øgede velfærdsudgifter"` er positivt korreleret med socialdemokratisk politik, ved den intet om `"administrationen forhøjede sociale udgifter"`,  *selvom sætningerne er semantisk identiske*. Hvert ord behandles som totalt uafhængigt.
 :::
 :::
 
@@ -857,7 +873,7 @@ Vi har brug for er en repræsentation, der fanger, at ord der optræder i lignen
 
 ## Fra symboler til vektorer
 
-Ideen bag word embeddings er at mappe hvert ord til et punkt i et kontinuerligt, høj-dimensionalt rum, hvor geometrisk afstand reflekterer semantisk lighed.
+Ideen bag `word embeddings` er at "mappe" hvert ord til et punkt i et **kontinuerligt, høj-dimensionalt rum**, hvor geometrisk afstand reflekterer semantisk lighed.
 
 Et lille corpus om politik: 
 
@@ -903,7 +919,7 @@ Men disse vektorer er stadig meget **sparse** (mange nuller) og **høj-dimension
 
 ## Word embeddings (Skip-gram arkitekturen)
 
-Skip-gram modellen siger: *"Givet et ord, forudsig dets kontekst."* 
+`Skip-gram` modellen siger: *"Givet et ord, forudsig dets kontekst."* 
 
 > Ideen er, at ord med lignende betydninger optræder i lignende kontekster. Hvis vi ofte ser "hund" i nærheden af "gøede", "bold", "gå tur", vil vi sandsynligvis også se "kat" i lignende kontekster (måske "miavede", "legetøj", "kæle").
 
@@ -930,6 +946,7 @@ Efter tusindvis af sådanne opdateringer på mange sætninger lærer modellen em
 
 Lad os forestille os, at efter træning på et stort `politisk corpus` har vi lært disse embeddings (forenklet til 2D):
 
+::: {style="font-size: 0.6em;"}
 |            | dim1 (økonomisk venstre-højre) | dim2 (institutionel magt) |
 |------------|--------------------------------|---------------------------|
 | velfærd    | -0.8                           | 0.1                       |
@@ -941,22 +958,29 @@ Lad os forestille os, at efter træning på et stort `politisk corpus` har vi l�
 | opposition | 0.0                            | 0.7                       |
 | minister   | 0.1                            | 0.8                       |
 | borgmester | -0.1                           | 0.6                       |
+:::
+
+::: {style="font-size: 0.8em;"}
 
 * Dimension 1 fanger noget om politisk orientering: velfærd/uddannelse (venstre) vs. forsvar/sikkerhed (højre)
 * Dimension 2 fanger institutionel magt: regering/minister høj, almindelige politikområder lav
+:::
 
 ---
 
 Fra disse dimensioner kan vi beregne semantisk lighed. 
 
+::: {style="font-size: 0.7em;"}
 **Cosinus-ligheden mellem to vektorer:**
 
 $$
 \text{similarity}(\mathbf{v}_1, \mathbf{v}_2) = \frac{\mathbf{v}_1 \cdot \mathbf{v}_2}{\|\mathbf{v}_1\| \times \|\mathbf{v}_2\|}
 $$
+:::
 
-#### Cosinus-lighed mellem "velfærd" og "uddannelse"
+#### *Cosinus-lighed mellem "velfærd" og "uddannelse"*
 
+::: {style="font-size: 0.7em;"}
 **Vektorerne:**
 
 $$
@@ -986,10 +1010,13 @@ $$
 $$
 
 Dette viser at "velfærd" og "uddannelse" har meget høj semantisk lighed (tæt på 1).
+:::
 
 ---
 
-#### Cosinus-lighed mellem "velfærd" og "forsvar"
+#### *Cosinus-lighed mellem "velfærd" og "forsvar"*
+
+::: {style="font-size: 0.7em;"}
 
 **Vektorerne:**
 
@@ -1020,32 +1047,9 @@ $$
 $$
 
 Dette viser at "velfærd" og "forsvar" har **negativ semantisk lighed** (modsat rettede politiske koncepter).
-
-## Dimensionalitet og hvad dimensioner er i tekster
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 1.3em;"}
-```
-y
-│
-0.4  •forsvar •skat
-│
-0.3                 •uddannelse
-│
-0.2                    •velfærd
-│
-└──────────────────────────────── x
-    -0.6   -0.5       0.7   0.8
-```
-:::
 :::
 
-* X-aksen (dimension 1): Måske politisk orientering (venstre/højre)
-* Y-aksen (dimension 2): Hvad kunne det være? 
-
----
-
-Hvad betyder det så hvis vi har 300 dimensioner?
+## Hvad betyder det så hvis vi har 300 dimensioner?
 
 ```
 ord_vector = [
@@ -1133,6 +1137,7 @@ Ofte vil vi visualisere embeddings, men vi kan ikke visualisere 300 dimensioner.
 
 * `PCA` finder de 2 retninger i det 300-dimensionale rum, hvor dataene varierer mest. 
 
+::: {style="font-size: 0.6em;"}
 ```{python spacy-dk-example}
 #| eco: true
 #| eval: true
@@ -1160,12 +1165,13 @@ vectors = np.array(vectors)  # Shape: [8 words × 300 dimensions]
 pca = PCA(n_components=2)
 vectors_2d = pca.fit_transform(vectors)  # Shape: [8 words × 2 dimensions]
 ```
+:::
 
 ---
 
 ```{python plot-pca-spacy}
 # Plot
-plt.figure(figsize=(10, 8))
+plt.figure(figsize=(6, 6))
 for i, word in enumerate(words):
     x, y = vectors_2d[i]
     plt.scatter(x, y)
@@ -1183,6 +1189,7 @@ plt.show()
 * Brug word embeddings (ordvektorer) til at undersøge implicitte kønsassociationer i sproget. 
 * Måler hvor meget en karriere-vektor "peger" i samme retning som køns-aksen
 
+::: {style="font-size: 0.6em;"}
 ```{python}
 #| eval: true
 #| echo: true
@@ -1206,6 +1213,7 @@ for career in careers:
     score = np.dot(career_vector, gender_axis)
     career_gender_scores[career] = score
 ```
+:::
 
 ---
 
@@ -1327,6 +1335,7 @@ SpaCy's større modeller (medium og large) kommer med pretrained word vectors. D
 
 ---
 
+
 ```{python}
 import spacy
 import numpy as np
@@ -1385,6 +1394,8 @@ Pipeline-arkitekturen starter med råtekst og sender den gennem en række kompon
 4. Named entity recognition kommer derefter og identificerer navngivne entiteter i teksten – personer, organisationer, lokationer, datoer, og så videre. Dette er kritisk for mange anvendelser, fra at uddrage information fra nyhedsartikler til at anonymisere følsomme data. 
 :::
 :::
+
+---
 
 Hele denne pipeline er modulariseret og konfigurbar. Du kan tilføje dine egne komponenter, fjerne dem du ikke har brug for, eller ændre rækkefølgen. 
 
@@ -1502,7 +1513,7 @@ for token in doc:
     print(f"{token.text} <- {token.dep_} <- {token.head.text}")
 ```
 
-::: {style="font-size: 1.0em;"}
+::: {style="font-size: 0.7em;"}
 * `nsubj`: "Mette" er nominal subjekt til "forklarede" (hvem udfører handlingen)
 * `flat`: "Frederiksen" er flad relation til "Mette" (navn-konstruktion)
 * `ROOT`: "forklarede" er sætningens rod (hovedverbet)
@@ -1537,6 +1548,7 @@ Udenrigsminister Lars Løkke Rasmussen kommenterede, at Danmark vil investere
 doc = nlp(tekst)
 
 # Udtræk organisationer og personer
+
 organisationer = [ent.text for ent in doc.ents if ent.label_ == "ORG"]
 personer = [ent.text for ent in doc.ents if ent.label_ == "PER"]
 lokationer = [ent.text for ent in doc.ents if ent.label_ == "LOC"]
@@ -1552,6 +1564,8 @@ for token in doc:
         kontekst = doc[max(0, token.i-3):min(len(doc), token.i+4)]
         print(f"Tal: {token.text}, Kontekst: {kontekst.text}")
 ```
+
+---
 
 Dette eks. fremhæver SpaCy's "evne" til mønstergenkendelse og informationsudtræk. 
 
